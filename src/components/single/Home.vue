@@ -1,72 +1,121 @@
 <template>
   <div>
-    <ul>
-      <li v-for="item in dataList" :key="item.name" @click="onClickList()">
-        <div class="li-box">
-          <div class="seize">
-            <img v-bind:src="item.headPortraitUrl" alt="" />
-          </div>
-          <div class="content-box">
-            <div class="information-box">
-              <div class="name-box">
-                <p class="name">{{item.name}}</p>
-                <p class="age">{{item.age}}</p>
-                <p class="address">{{item.address}}</p>
-                <p class="working-years">{{item.workingYears}}</p>
+    <van-pull-refresh
+      v-model="isLoading"
+      success-text="刷新成功"
+      @refresh="onRefresh"
+      loading-text="刷新中"
+    >
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有了啦，人家可是有底线的～"
+        @load="onLoad"
+      >
+        <ul>
+          <li v-for="item in dataList" :key="item.name" @click="onClickList()">
+            <div class="li-box">
+              <div class="seize">
+                <img v-bind:src="item.headPortraitUrl" alt="" />
               </div>
-              <div>
-                <!-- <p class="consulting-btn">立即咨询</p> -->
+              <div class="content-box">
+                <div class="information-box">
+                  <div class="name-box">
+                    <p class="name">{{ item.name }}</p>
+                    <p class="age">{{ item.age }}</p>
+                    <p class="address">{{ item.address }}</p>
+                    <p class="working-years">{{ item.workingYears }}</p>
+                  </div>
+                  <div>
+                    <!-- <p class="consulting-btn">立即咨询</p> -->
+                  </div>
+                </div>
+                <div class="intention-box">
+                  <p class="intention">{{ item.intention }}</p>
+                </div>
+                <div class="specialty-box">
+                  <p class="specialty">
+                    {{ item.specialty }}
+                  </p>
+                </div>
               </div>
             </div>
-            <div class="intention-box">
-              <p class="intention">{{item.intention}}</p>
+            <div style="text-align: center;">
+              <hr />
             </div>
-            <div class="specialty-box">
-              <p class="specialty">
-                {{item.specialty}}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div style="text-align: center;">
-          <hr />
-        </div>
-      </li>
-    </ul>
+          </li>
+        </ul>
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 <script>
+import { PullRefresh, List } from "vant";
 export default {
   name: "Home",
+  components: {
+    [PullRefresh.name]: PullRefresh,
+    [List.name]: List
+  },
   data() {
     return {
+      isLoading: false,
+      loading: false,
+      finished: false,
       dataList: [
-        {
-          headPortraitUrl: require("../../assets/img/zhanwei.png"),
-          name: "张琴",
-          age: "12岁",
-          address: "江西人",
-          workingYears: "从业12年",
-          intention: "不住家|保姆|北京",
-          specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦"
-        },
-        {
-          headPortraitUrl: require("../../assets/img/zhanwei.png"),
-          name: "张琴",
-          age: "12岁",
-          address: "江西人",
-          workingYears: "从业12年",
-          intention: "不住家|保姆|北京",
-          specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦"
-        }
+
       ]
     };
   },
+  created() {
+    // axios.get('https://www.baidu.com/').then((response) => {
+    //   console.log(response.data);
+    // }).catch(function (error) {
+    // console.log(error);
+    // })
+    axios
+      .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+      .then(response => (this.info = response.data.bpi));
+  },
   methods: {
     onClickList() {
-      this.$router.push('/Details');
+      this.$router.push("/Details");
+      // this.$emit('onClickList');
+    },
+    // 下拉刷新
+    onRefresh() {
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 1000);
+    },
+    // 上拉加载
+    onLoad() {
+      // 异步更新数据
+      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      setTimeout(() => {
+        const obj = {
+          headPortraitUrl: require("../../assets/img/zhanwei.png"),
+          name: "张琴",
+          age: "12岁",
+          address: "江西人",
+          workingYears: "从业12年",
+          intention: "不住家|保姆|北京",
+          specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦"
+        };
+        for (let i = 0; i < 10; i++) {
+          this.dataList.push(obj);
+        }
+
+        // 加载状态结束
+        this.loading = false;
+
+        // 数据全部加载完成
+        if (this.dataList.length >= 40) {
+          this.finished = true;
+        }
+      }, 4000);
     }
-  },
+  }
 };
 </script>
 <style scoped>

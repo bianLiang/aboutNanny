@@ -1,18 +1,30 @@
 <template>
   <div id="app">
-    <Title/>
-    <router-view/>
+    <Title ref="myTitle" />
+    <router-view />
   </div>
 </template>
 
 <script>
- import Title from '@/components/Title.vue'
+import Title from "@/components/Title.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-      Title
+    Title
+  },
+  watch: {
+    $route(to, from) {
+      console.log(to.path);
+      this.$refs.myTitle.onIsShowIcon();
+      if (to.path === "/Details") {
+        this.$refs.myTitle.changeTitle('简历详情');
+      } else if (to.path === '/') {
+        this.$refs.myTitle.changeTitle('帮宝家政找阿姨');
+      }
     }
-}
+  },
+  methods: {}
+};
 </script>
 
 <style>
