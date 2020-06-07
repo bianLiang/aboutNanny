@@ -19,7 +19,6 @@ export default {
     $route: "routeChange"
   },
   created(){
-    console.log(this.$route.path);
     if(this.$route.path === '/') {
       this.isIcon = false;
     } else {

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Title ref="myTitle" />
-    <router-view />
+    <router-view/>
   </div>
 </template>
 
@@ -23,7 +23,11 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    // onClickList() {
+    //   this.$refs.details.onClickList();
+    // }
+  }
 };
 </script>
 

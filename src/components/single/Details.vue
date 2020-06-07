@@ -153,11 +153,12 @@
       </div>
       <div class="img-box">
         <img
-          v-for="item in data.certificateDisplayList"
+          v-for="(item, key) in data.certificateDisplayList"
           :key="item"
           class="img"
           :src="item"
           alt=""
+          @click="showCertificateDisplay(item, key)"
         />
         <div
           v-if="data.certificateDisplayList.length > 9"
@@ -168,6 +169,23 @@
         >
           <span>+{{ data.certificateDisplayList.length }}</span>
         </div>
+
+        <van-popup v-model="isShowCertificateDisplay">
+          <v-touch
+            v-on:swipeleft="onSwipeLeft_1"
+            v-on:swiperight="onSwipeRight_1"
+            tag="div"
+          >
+            <div class="isShowPersonalDisplay">
+              <span
+                >{{ currentPages_1 }}/{{
+                  data.certificateDisplayList.length
+                }}</span
+              >
+              <img :src="showCertificateDisplayUrl" alt="" />
+            </div>
+          </v-touch>
+        </van-popup>
       </div>
     </div>
     <div class="share" @click="showShare">立即分享</div>
@@ -185,17 +203,38 @@
 </template>
 <script>
 import { Popup } from "vant";
+import wxapi from "@/api/wxapi.js";
 export default {
   name: "Details",
   components: {
     [Popup.name]: Popup
+  },
+  created() {
+    // 获取id
+    console.log(this.$route.query);
+    // axios
+    //   .post("http://192.168.9.165:11112/hwWorkerNanny/listAll", {
+    //     pageNo: 0,
+    //     pageSize: 5
+    //   })
+    //   .then(function(response) {
+    //     console.log(response.data.data.list);
+    //     // that.pageNo = that.pageNo+5;
+    //     this.processingData(response.data.data.list);
+    //   })
+    //   .catch(function(error) {
+    //     console.log(error);
+    //   });
   },
   data() {
     return {
       show: false,
       isShowPersonalDisplay: false,
       showPersonalDisplayUrl: "",
+      isShowCertificateDisplay: false,
+      showCertificateDisplayUrl: "",
       currentPages: 0,
+      currentPages_1: 0,
       data: {
         headPortraitUrl: require("../../assets/img/zhanwei.png"),
         name: "张琴",
@@ -237,13 +276,23 @@ export default {
           require("../../assets/img/tupian.jpg"),
           require("../../assets/img/tupian.jpg"),
           require("../../assets/img/tupian.jpg"),
+          require("../../assets/img/tupian1.jpg"),
           require("../../assets/img/tupian.jpg"),
           require("../../assets/img/tupian.jpg")
         ]
       }
     };
   },
+  mounted() {
+    // 调用微信api
+    wxapi.wxRegister(this.wxRegCallback);
+  },
   methods: {
+    onClickList() {
+      console.log("调用了");
+    },
+    // 处理初始数据
+    processingData() {},
     showShare() {
       this.show = true;
     },
@@ -252,25 +301,90 @@ export default {
       this.currentPages = index + 1;
       this.isShowPersonalDisplay = true;
     },
+    showCertificateDisplay(url, index) {
+      this.showCertificateDisplayUrl = url;
+      this.currentPages_1 = index + 1;
+      this.isShowCertificateDisplay = true;
+    },
     onSwipeLeft() {
-      console.log("向左滑动");
       if (this.currentPages !== this.data.personalDisplayList.length) {
-        this.currentPages = this.currentPages+1;
-        this.showPersonalDisplayUrl = this.data.personalDisplayList[this.currentPages - 1];
+        this.currentPages = this.currentPages + 1;
+        this.showPersonalDisplayUrl = this.data.personalDisplayList[
+          this.currentPages - 1
+        ];
 
         console(this.currentPages);
       }
     },
     onSwipeRight() {
-      console.log("向右滑动");
-       if (this.currentPages !== 1) {
-         this.currentPages = this.currentPages-1;
-        this.showPersonalDisplayUrl = this.data.personalDisplayList[this.currentPages - 1];
+      if (this.currentPages !== 1) {
+        this.currentPages = this.currentPages - 1;
+        this.showPersonalDisplayUrl = this.data.personalDisplayList[
+          this.currentPages - 1
+        ];
         console(this.currentPages);
       }
     },
+    onSwipeLeft_1() {
+      if (this.currentPages_1 !== this.data.certificateDisplayList.length) {
+        this.currentPages_1 = this.currentPages_1 + 1;
+        this.showCertificateDisplayUrl = this.data.certificateDisplayList[
+          this.currentPages_1 - 1
+        ];
+      }
+    },
+    onSwipeRight_1() {
+      if (this.currentPages_1 !== 1) {
+        this.currentPages_1 = this.currentPages_1 - 1;
+        this.showCertificateDisplayUrl = this.data.certificateDisplayList[
+          this.currentPages_1 - 1
+        ];
+      }
+    },
     shareWeChat() {},
-    shareMoments() {}
+    shareMoments() {
+      console.log("点击了");
+      this.wxShareTimeline();
+    },
+    // 调用微信api
+    wxRegCallback() {
+      // 用于微信JS-SDK回调
+      this.wxShareTimeline();
+      this.wxShareAppMessage();
+    },
+    wxShareTimeline() {
+      // 微信自定义分享到朋友圈
+      let option = {
+        title: "限时团购周 挑战最低价", // 分享标题, 请自行替换
+        link: window.location.href.split("#")[0], // 分享链接，根据自身项目决定是否需要split
+        imgUrl: "logo.png", // 分享图标, 请自行替换，需要绝对路径
+        success: () => {
+          alert("分享成功");
+        },
+        error: () => {
+          alert("已取消分享");
+        }
+      };
+      // 将配置注入通用方法
+      wxapi.ShareTimeline(option);
+    },
+    wxShareAppMessage() {
+      // 微信自定义分享给朋友
+      let option = {
+        title: "限时团购周 挑战最低价", // 分享标题, 请自行替换
+        desc: "限时团购周 挑战最低价", // 分享描述, 请自行替换
+        link: window.location.href.split("#")[0], // 分享链接，根据自身项目决定是否需要split
+        imgUrl: "logo.png", // 分享图标, 请自行替换，需要绝对路径
+        success: () => {
+          alert("分享成功");
+        },
+        error: () => {
+          alert("已取消分享");
+        }
+      };
+      // 将配置注入通用方法
+      wxapi.ShareAppMessage(option);
+    }
   }
 };
 </script>

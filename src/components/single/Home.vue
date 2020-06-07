@@ -13,7 +13,11 @@
         @load="onLoad"
       >
         <ul>
-          <li v-for="item in dataList" :key="item.name" @click="onClickList()">
+          <li
+            v-for="item in dataList"
+            :key="item.name"
+            @click="onClickList(item.id)"
+          >
             <div class="li-box">
               <div class="seize">
                 <img v-bind:src="item.headPortraitUrl" alt="" />
@@ -62,25 +66,60 @@ export default {
       isLoading: false,
       loading: false,
       finished: false,
-      dataList: [
-
-      ]
+      dataList: [],
+      pageNo: 0,
+      page: 0,
+      pageSize: 5
     };
   },
-  created() {
-    // axios.get('https://www.baidu.com/').then((response) => {
-    //   console.log(response.data);
-    // }).catch(function (error) {
-    // console.log(error);
-    // })
-    axios
-      .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-      .then(response => (this.info = response.data.bpi));
+  mounted() {
+    this.ajax();
   },
   methods: {
-    onClickList() {
-      this.$router.push("/Details");
+    ajax() {
+      const that = this;
+      axios
+        .post("http://192.168.9.165:11112/hwWorkerNanny/listAll", {
+          pageNo: that.pageNo,
+          pageSize: that.pageSize
+        })
+        .then(function(response) {
+          console.log(response.data.data.list);
+          that.loading = false;
+          if (response.data.data.list.length) {
+            that.processingData(response.data.data.list);
+          } else {
+            that.finished = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 处理初始数据
+    processingData(data) {
+      for (let i = 0; i < data.length; i++) {
+        this.dataList.push({
+          headPortraitUrl: require("../../assets/img/zhanwei.png"),
+          name: data[i].name,
+          age: data[i].age + "岁",
+          address: data[i].native_place,
+          workingYears: `从业${data[i].work_working_years}年`,
+          intention: `${data[i].isHome === 0 ? "不住家" : "住家"}|${
+            data[i].work_hope_job
+          }|${data[i].work_hope_job}`,
+          specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦",
+          id: data[i].id
+        });
+      }
+    },
+    onClickList(id) {
+      console.log(id);
       // this.$emit('onClickList');
+      this.$router.push({
+        name: "Details",
+        query: { ID: 1 }
+      });
     },
     // 下拉刷新
     onRefresh() {
@@ -91,19 +130,27 @@ export default {
     // 上拉加载
     onLoad() {
       // 异步更新数据
+      // this.page += 1;
+      // this.pageNo = this.page *this.pageSize;
+      // this.ajax();
+
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      console.log("调用");
       setTimeout(() => {
-        const obj = {
-          headPortraitUrl: require("../../assets/img/zhanwei.png"),
-          name: "张琴",
-          age: "12岁",
-          address: "江西人",
-          workingYears: "从业12年",
-          intention: "不住家|保姆|北京",
-          specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦"
-        };
+        if (this.isLoading) {
+          this.list = [];
+          this.isLoading = false;
+        }
         for (let i = 0; i < 10; i++) {
-          this.dataList.push(obj);
+          this.dataList.push({
+            headPortraitUrl: require("../../assets/img/zhanwei.png"),
+            name: "张琴" + i,
+            age: "12岁",
+            address: "江西人",
+            workingYears: "从业12年",
+            intention: "不住家|保姆|北京",
+            specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦"
+          });
         }
 
         // 加载状态结束

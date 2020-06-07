@@ -44,7 +44,6 @@ export default {
 
   methods: {
     onRefresh() {
-      console.log(1);
       this.isLoading = false;
     },
      onLoad() {
