@@ -47,7 +47,7 @@
     <div class="introduce-box">
       <div class="introduce">
         <img
-          style="width: 0.44rem;margin-right: 0.05rem;"
+          style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
           src="../../assets/img/个人 (2).png"
           alt=""
         /><span>自我介绍</span>
@@ -62,7 +62,7 @@
     <div class="intention-box">
       <div class="intention">
         <img
-          style="width: 0.44rem;margin-right: 0.05rem;"
+          style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
           src="../../assets/img/定位.png"
           alt=""
         /><span>求职意向</span>
@@ -87,7 +87,7 @@
     <div class="experience-box">
       <div class="experience">
         <img
-          style="width: 0.44rem;margin-right: 0.05rem;"
+          style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
           src="../../assets/img/劳动技能.png"
           alt=""
         /><span>从业经历</span>
@@ -104,29 +104,23 @@
     <div class="personal-display-box">
       <div class="personal-display">
         <img
-          style="width: 0.44rem;margin-right: 0.05rem;"
+          style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
           src="../../assets/img/照片.png"
           alt=""
         /><span>个人展示</span>
       </div>
       <div class="img-box">
         <img
-          v-for="(item, key) in data.personalDisplayList"
+          v-for="(item, key) in data.personalDisplayList_1"
           :key="key"
           class="img"
           :src="item"
           alt=""
           @click="showPersonalDisplay(item, key)"
         />
-        <div
-          v-if="data.personalDisplayList.length > 9"
-          class="img push"
-          :style="{
-            backgroundImage: 'url(' + data.personalDisplayList[9] + ')'
-          }"
-        >
-          <span>+{{ data.personalDisplayList.length }}</span>
-        </div>
+        <div class="mask"  @click="showPersonalDisplay(data.personalDisplayList_1[8], 8)" v-if="data.personalDisplayList.length > 9"></div>
+        <span class="push" v-if="data.personalDisplayList.length > 9">+{{ data.personalDisplayList.length }}</span>
+
         <van-popup v-model="isShowPersonalDisplay">
           <v-touch
             v-on:swipeleft="onSwipeLeft"
@@ -146,29 +140,22 @@
     <div class="certificate-display-box">
       <div class="certificate-display">
         <img
-          style="width: 0.44rem;margin-right: 0.05rem;"
+          style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
           src="../../assets/img/电子证件.png"
           alt=""
         /><span>证件展示</span>
       </div>
       <div class="img-box">
         <img
-          v-for="(item, key) in data.certificateDisplayList"
+          v-for="(item, key) in data.certificateDisplayList_1"
           :key="item"
           class="img"
           :src="item"
           alt=""
           @click="showCertificateDisplay(item, key)"
         />
-        <div
-          v-if="data.certificateDisplayList.length > 9"
-          class="img push"
-          :style="{
-            backgroundImage: 'url(' + data.certificateDisplayList[9] + ')'
-          }"
-        >
-          <span>+{{ data.certificateDisplayList.length }}</span>
-        </div>
+        <div class="mask"  @click="showCertificateDisplay(data.certificateDisplayList_1[8], 8)" v-if="data.certificateDisplayList.length > 9"></div>
+        <span class="push" v-if="data.certificateDisplayList.length > 9">+{{ data.certificateDisplayList.length }}</span>
 
         <van-popup v-model="isShowCertificateDisplay">
           <v-touch
@@ -212,19 +199,7 @@ export default {
   created() {
     // 获取id
     console.log(this.$route.query);
-    // axios
-    //   .post("http://192.168.9.165:11112/hwWorkerNanny/listAll", {
-    //     pageNo: 0,
-    //     pageSize: 5
-    //   })
-    //   .then(function(response) {
-    //     console.log(response.data.data.list);
-    //     // that.pageNo = that.pageNo+5;
-    //     this.processingData(response.data.data.list);
-    //   })
-    //   .catch(function(error) {
-    //     console.log(error);
-    //   });
+    this.ajax(this.$route.query.ID);
   },
   data() {
     return {
@@ -235,52 +210,55 @@ export default {
       showCertificateDisplayUrl: "",
       currentPages: 0,
       currentPages_1: 0,
-      data: {
-        headPortraitUrl: require("../../assets/img/zhanwei.png"),
-        name: "张琴",
-        education: "小学",
-        genitals: "马",
-        constellation: "白羊座",
-        nation: "维吾尔族",
-        currentAddress: "北京海淀",
-        age: "41岁",
-        experiences: "2年",
-        native: "四川",
-        specialty: "做饭做家务｜能照顾小孩｜照顾老人",
-        introduceContent:
-          " 我以前丛事家政2到3年，能吃苦耐劳，为人和善，做事麻利，勤劳。愿意照顾老人，做家务",
-        jobStatus: "待岗",
-        jobType: "保姆/做饭阿姨",
-        intendedCity: "北京",
-        isHome: "住家/不住家",
-        experience: [
-          {
-            experiencetime: "其他 2018.08-2019.07",
-            experienceContent:
-              "在饭店做面点，专业饺子工；在饭店做面点，专业饺子工在饭店做面点，专业饺子工在饭店做面点，专业饺子工"
-          }
-        ],
-        personalDisplayList: [
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian1.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg")
-        ],
-        certificateDisplayList: [
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian1.jpg"),
-          require("../../assets/img/tupian.jpg"),
-          require("../../assets/img/tupian.jpg")
-        ]
-      }
+      data: {}
+      // data: {
+      //   headPortraitUrl: require("../../assets/img/zhanwei.png"),
+      //   name: "张琴",
+      //   education: "小学",
+      //   genitals: "马",
+      //   constellation: "白羊座",
+      //   nation: "维吾尔族",
+      //   currentAddress: "北京海淀",
+      //   age: "41岁",
+      //   experiences: "2年",
+      //   native: "四川",
+      //   specialty: "做饭做家务｜能照顾小孩｜照顾老人",
+      //   introduceContent:
+      //     " 我以前丛事家政2到3年，能吃苦耐劳，为人和善，做事麻利，勤劳。愿意照顾老人，做家务",
+      //   jobStatus: "待岗",
+      //   jobType: "保姆/做饭阿姨",
+      //   intendedCity: "北京",
+      //   isHome: "住家/不住家",
+      //   experience: [
+      //     {
+      //       experiencetime: "其他 2018.08-2019.07",
+      //       experienceContent:
+      //         "在饭店做面点，专业饺子工；在饭店做面点，专业饺子工在饭店做面点，专业饺子工在饭店做面点，专业饺子工"
+      //     }
+      //   ],
+      //   personalDisplayList: [
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian1.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg")
+      //   ],
+      //   personalDisplayList_1: [],
+      //   certificateDisplayList: [
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian1.jpg"),
+      //     require("../../assets/img/tupian.jpg"),
+      //     require("../../assets/img/tupian.jpg")
+      //   ],
+      //   certificateDisplayList_1:[]
+      // }
     };
   },
   mounted() {
@@ -288,11 +266,76 @@ export default {
     wxapi.wxRegister(this.wxRegCallback);
   },
   methods: {
-    onClickList() {
-      console.log("调用了");
+    ajax(ID) {
+      const that = this;
+      axios
+        .post("http://192.168.1.188:11112/hwWorkerNanny/findById", {
+          id: ID
+        })
+        .then(function(response) {
+          console.log(response.data.data);
+          that.processingData(response.data.data);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
     // 处理初始数据
-    processingData() {},
+    processingData(data) {
+      this.data = {
+        headPortraitUrl: data.imageWork,
+        name: data.name,
+        education: data.education,
+        genitals: data.genitals,
+        constellation: data.constellation,
+        nation: data.nation,
+        currentAddress: data.address,
+        age: `${data.age}岁`,
+        experiences: `${data.workWorkingYears}年`,
+        native: data.nativePlace,
+        specialty: "做饭做家务｜能照顾小孩｜照顾老人",
+        introduceContent:data.introduceOneselfTo,
+        jobStatus: this.processingjobStatus(data.workWorkingState),
+        jobType: data.workHopeJob,
+        intendedCity: data.cityName,
+        isHome: `${data.isHome === 0 ? "不住家" : "住家"}`,
+        experience: [
+          {
+            experiencetime: "其他 2018.08-2019.07",
+            experienceContent:
+              "在饭店做面点，专业饺子工；在饭店做面点，专业饺子工在饭店做面点，专业饺子工在饭店做面点，专业饺子工"
+          }
+        ],
+        personalDisplayList: data.imageIds,
+        personalDisplayList_1: this.processingImgList(data.imageIds),
+        certificateDisplayList: data.imagePersonals,
+        certificateDisplayList_1:this.processingImgList(data.imagePersonals)
+      }
+    },
+    // 截取10条图片
+    processingImgList(data) {
+      if (data.length > 9) {
+        const list = [];
+        for(let i = 0; i < 9; i++) {
+          list.push(data[i]);
+        }
+        return list;
+      } else {
+        return data;
+      }
+    },
+    // 判断求职状态
+    processingjobStatus(data) {
+      if (data === 0) {
+        return '待岗';
+      }
+      if (data === 1) {
+        return '已上岗';
+      }
+      if (data === 2) {
+        return '已回老家';
+      }
+    },
     showShare() {
       this.show = true;
     },
@@ -459,6 +502,8 @@ export default {
   color: #3395ff;
   font-size: 0.32rem;
   display: flex;
+  height: 0.44rem;
+  line-height: 0.44rem;
 }
 .introduce-specialty,
 .introduce-content {
@@ -538,6 +583,7 @@ export default {
 }
 .img-box {
   margin: 0.3rem 0;
+  position: relative;
 }
 .img {
   width: 2.1rem;
@@ -545,20 +591,23 @@ export default {
   border-radius: 8px;
   margin-right: 0.05rem;
 }
+.mask {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  bottom: 0.2rem;
+  right: 0.1rem;
+  z-index: 200;
+}
 .push {
-  display: inline-block;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  text-align: center;
+  position: absolute;
   font-size: 0.4rem;
   color: #fff;
-  line-height: 2.1rem;
-  position: relative;
-}
-.push span {
-  position: absolute;
-  left: 30%;
+  bottom: 1.1rem;
+  right: 0.9rem;
+
 }
 .show-box {
   width: 5rem;
@@ -575,5 +624,6 @@ export default {
   top: 0;
   color: #fff;
   font-size: 0.5rem;
+  background: rgba(0,0,0,0.2);
 }
 </style>

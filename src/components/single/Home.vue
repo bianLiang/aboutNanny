@@ -11,6 +11,7 @@
         :finished="finished"
         finished-text="没有了啦，人家可是有底线的～"
         @load="onLoad"
+        :immediate-check="isImmediateCheck"
       >
         <ul>
           <li
@@ -44,9 +45,8 @@
                 </div>
               </div>
             </div>
-            <div style="text-align: center;">
-              <hr />
-            </div>
+            <!-- <div class="solid" style="text-align: center;">
+            </div> -->
           </li>
         </ul>
       </van-list>
@@ -66,6 +66,7 @@ export default {
       isLoading: false,
       loading: false,
       finished: false,
+      isImmediateCheck: false,
       dataList: [],
       pageNo: 0,
       page: 0,
@@ -78,17 +79,27 @@ export default {
   methods: {
     ajax() {
       const that = this;
+      if (that.isLoading) {
+            that.dataList = [];
+            that.isLoading = false;
+            that.pageNo = 0;
+            that.page = 0;
+          }
       axios
-        .post("http://192.168.9.165:11112/hwWorkerNanny/listAll", {
+        .post("http://192.168.1.188:11112/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize
         })
         .then(function(response) {
-          console.log(response.data.data.list);
+          console.log(response.data.data);
+
           that.loading = false;
           if (response.data.data.list.length) {
             that.processingData(response.data.data.list);
+            that.page += 1;
+            that.pageNo = that.page * that.pageSize - 1;
           } else {
+            console.log("执行这里");
             that.finished = true;
           }
         })
@@ -104,7 +115,7 @@ export default {
           name: data[i].name,
           age: data[i].age + "岁",
           address: data[i].native_place,
-          workingYears: `从业${data[i].work_working_years}年`,
+          workingYears: `从业${data[i].worWorkingYears}年`,
           intention: `${data[i].isHome === 0 ? "不住家" : "住家"}|${
             data[i].work_hope_job
           }|${data[i].work_hope_job}`,
@@ -118,49 +129,52 @@ export default {
       // this.$emit('onClickList');
       this.$router.push({
         name: "Details",
-        query: { ID: 1 }
+        query: { ID: id }
       });
     },
     // 下拉刷新
     onRefresh() {
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
+      const that = this;
+      that.finished = false;
+      that.loading = true;
+
+      that.ajax();
+
+      // setTimeout(() => {
+      //   this.isLoading = false;
+      // }, 1000);
     },
     // 上拉加载
     onLoad() {
       // 异步更新数据
-      // this.page += 1;
-      // this.pageNo = this.page *this.pageSize;
-      // this.ajax();
-
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       console.log("调用");
-      setTimeout(() => {
-        if (this.isLoading) {
-          this.list = [];
-          this.isLoading = false;
-        }
-        for (let i = 0; i < 10; i++) {
-          this.dataList.push({
-            headPortraitUrl: require("../../assets/img/zhanwei.png"),
-            name: "张琴" + i,
-            age: "12岁",
-            address: "江西人",
-            workingYears: "从业12年",
-            intention: "不住家|保姆|北京",
-            specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦"
-          });
-        }
+      this.ajax();
+      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      // setTimeout(() => {
+      //   if (this.isLoading) {
+      //     this.list = [];
+      //     this.isLoading = false;
+      //   }
+      //   for (let i = 0; i < 10; i++) {
+      //     this.dataList.push({
+      //       headPortraitUrl: require("../../assets/img/zhanwei.png"),
+      //       name: "张琴" + i,
+      //       age: "12岁",
+      //       address: "江西人",
+      //       workingYears: "从业12年",
+      //       intention: "不住家|保姆|北京",
+      //       specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦"
+      //     });
+      //   }
 
-        // 加载状态结束
-        this.loading = false;
+      //   // 加载状态结束
+      //   this.loading = false;
 
-        // 数据全部加载完成
-        if (this.dataList.length >= 40) {
-          this.finished = true;
-        }
-      }, 4000);
+      //   // 数据全部加载完成
+      //   if (this.dataList.length >= 40) {
+      //     this.finished = true;
+      //   }
+      // }, 4000);
     }
   }
 };
@@ -168,14 +182,14 @@ export default {
 <style scoped>
 .li-box {
   display: flex;
-  padding: 0.13rem;
+  padding: 0.13rem 0.13rem 0.33rem 0.13rem;
   margin: 0.3rem 0;
+  border-bottom: 0.01rem solid #d5d5d5;
 }
 
-hr {
+.solid {
   height: 0.01rem;
   background-color: #d5d5d5;
-  border: none;
   width: 96%;
   margin: 0.1rem auto;
 }

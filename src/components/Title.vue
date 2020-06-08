@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       isIcon: false,
-      title: "帮宝家政找阿姨"
+      title: "眼里有活家政找阿姨"
     };
   },
   watch: {
@@ -25,7 +25,7 @@ export default {
       this.isIcon = true;
     }
     if (this.$route.path === '/') {
-      this.title = '帮宝家政找阿姨';
+      this.title = '眼里有活家政找阿姨';
     } else if (this.$route.path === '/Details') {
       this.title = '简历详情';
     }

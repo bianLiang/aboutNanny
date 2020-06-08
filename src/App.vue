@@ -19,7 +19,7 @@ export default {
       if (to.path === "/Details") {
         this.$refs.myTitle.changeTitle('简历详情');
       } else if (to.path === '/') {
-        this.$refs.myTitle.changeTitle('帮宝家政找阿姨');
+        this.$refs.myTitle.changeTitle('眼里有活家政找阿姨');
       }
     }
   },
