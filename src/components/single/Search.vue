@@ -2,15 +2,38 @@
   <div>
     <div class="search-box">
       <van-search
-        readonly="true"
         background="#fff"
         shape="round"
+        show-action
+        v-model="value"
+        clearable="true"
+        autofocus="true"
         placeholder="请输入搜索关键词"
-        @click="clickSearch"
-      />
-      <Screen></Screen>
+      >
+        <template #action>
+          <div @click="onSearch">
+            <van-button class="searchBtn" color="#3395FF">搜索</van-button>
+          </div>
+        </template>
+      </van-search>
+      <div class="position-box" v-if="isRecommendedSearch">
+        <p class="recommended-search">推荐搜索</p>
+        <div>
+          <button
+            class="content-btn"
+            v-for="item in recommendedSearchList"
+            :key="item"
+            @click="clickrecommendedSearchBtn(item)"
+          >
+            {{ item }}
+          </button>
+        </div>
+      </div>
+      <div v-if="isScreen">
+        <Screen></Screen>
+      </div>
     </div>
-    <div class="content-max-box">
+    <div class="content-max-box" v-if="isScreen">
       <van-pull-refresh
         v-model="isLoading"
         success-text="刷新成功"
@@ -28,10 +51,11 @@
             <li
               v-for="item in dataList"
               :key="item.name"
+              @click="onClickList(item.id)"
             >
               <div class="li-box">
                 <div class="seize">
-                  <img @click="onClickList(item.id)" v-bind:src="item.headPortraitUrl" alt="" />
+                  <img v-bind:src="item.headPortraitUrl" alt="" />
                 </div>
                 <div class="content-box">
                   <div class="information-box">
@@ -42,8 +66,7 @@
                       <p class="working-years">{{ item.workingYears }}</p>
                     </div>
                     <div>
-                      <p class="consulting-btn" @click="showServiceModel">立即咨询</p>
-
+                      <!-- <p class="consulting-btn">立即咨询</p> -->
                     </div>
                   </div>
                   <div class="intention-box">
@@ -61,24 +84,33 @@
         </van-list>
       </van-pull-refresh>
     </div>
-    <ConsultingService ref="mymodel" ></ConsultingService>
+    <div class="empty" v-if="isEmpty">
+      <img src="../../assets/img/wulirong.png" alt="">
+      <p>没有搜索到您输入的内容</p>
+      <p>换个词试下吧～</p>
+    </div>
   </div>
 </template>
 <script>
-import { PullRefresh, List, Search } from "vant";
+import { PullRefresh, List, Search, Button } from "vant";
 import Screen from "../Screen";
-import ConsultingService from "../ConsultingService";
 export default {
-  name: "Home",
+  name: "Search",
   components: {
     [PullRefresh.name]: PullRefresh,
     [List.name]: List,
     [Search.name]: Search,
-    Screen,
-    ConsultingService
+    [Button.name]: Button,
+    Screen
   },
   data() {
     return {
+      value: "",
+      isRecommendedSearch: false,
+      isScreen: false,
+      isEmpty: true,
+      recommendedSearchList: ["育儿嫂", "保姆", "月嫂"],
+      // 列表数据
       isLoading: false,
       loading: false,
       finished: false,
@@ -93,8 +125,27 @@ export default {
     this.ajax();
   },
   methods: {
-    showServiceModel() {
-      this.$refs.mymodel.showModel();
+    onSearch() {},
+    clickrecommendedSearchBtn(item) {
+      this.value = item;
+    },
+    // 下拉刷新
+    onRefresh() {
+      const that = this;
+      that.finished = false;
+      that.loading = true;
+      that.ajax();
+    },
+    // 上拉加载
+    onLoad() {
+      this.ajax();
+    },
+    onClickList(id) {
+      console.log(id);
+      this.$router.push({
+        name: "Details",
+        query: { ID: id }
+      });
     },
     ajax() {
       const that = this;
@@ -144,32 +195,6 @@ export default {
           id: data[i].id
         });
       }
-    },
-    onClickList(id) {
-      console.log(id);
-      // this.$emit('onClickList');
-      this.$router.push({
-        name: "Details",
-        query: { ID: id }
-      });
-    },
-    clickSearch() {
-      this.$router.push({
-        name: "Search"
-      });
-    },
-    // 下拉刷新
-    onRefresh() {
-      const that = this;
-      that.finished = false;
-      that.loading = true;
-      that.ajax();
-    },
-    // 上拉加载
-    onLoad() {
-      // 异步更新数据
-      console.log("调用");
-      this.ajax();
     }
   }
 };
@@ -190,6 +215,45 @@ export default {
   border: 0.02rem solid #d5d5d5;
   background: #fff;
 }
+.searchBtn {
+  height: 0.68rem;
+  border-radius: 0.08rem;
+}
+.position-box {
+  width: 95%;
+  margin: 0 auto;
+  padding-top: 0.3rem;
+  border-top: 0.02rem #d5d5d5 solid;
+}
+.content-btn {
+  border-radius: 0.2rem;
+  margin-right: 0.35rem;
+  width: 2.1rem;
+  color: #333;
+  font-size: 0.28rem;
+  background: #f5f5f5;
+  border: none;
+  height: 0.68rem;
+}
+.content-btn:nth-child(3n + 0) {
+  margin-right: 0;
+}
+.recommended-search {
+  font-size: 0.32rem;
+  color: #999999;
+}
+.empty {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+.empty p {
+  color: #999999;
+  font-size: 0.32rem;
+}
+.empty img{
+  width: 5rem;
+}
+/**列表页*/
 .content-max-box {
   margin-top: 3.2rem;
 }
@@ -199,31 +263,18 @@ export default {
   margin: 0.3rem 0;
   border-bottom: 0.01rem solid #d5d5d5;
 }
-
-.solid {
-  height: 0.01rem;
-  background-color: #d5d5d5;
-  width: 96%;
-  margin: 0.1rem auto;
-}
-.information-box {
-  display: flex;
-}
-.name-box {
+.seize {
+  width: 1.5rem;
+  height: 2rem;
   display: flex;
 }
 .content-box {
   height: 2rem;
 }
-.intention-box {
-  margin: 0.23rem 0.1rem;
+.information-box {
+  display: flex;
 }
-.specialty-box {
-  margin: 0 0.1rem;
-}
-.seize {
-  width: 1.5rem;
-  height: 2rem;
+.name-box {
   display: flex;
 }
 .name {
@@ -256,13 +307,16 @@ export default {
   border: none;
   text-align: center;
   margin-left: 1.1rem;
-  position: absolute;
-  right: 0.1rem;
-  z-index: 1;
+}
+.intention-box {
+  margin: 0.23rem 0.1rem;
 }
 .intention {
   font-size: 0.28rem;
   color: #333333;
+}
+.specialty-box {
+  margin: 0 0.1rem;
 }
 .specialty {
   font-size: 0.28rem;

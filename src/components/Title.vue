@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       isIcon: false,
-      title: "眼里有活家政找阿姨"
+      title: "帮宝家政找阿姨"
     };
   },
   watch: {
@@ -25,10 +25,13 @@ export default {
       this.isIcon = true;
     }
     if (this.$route.path === '/') {
-      this.title = '眼里有活家政找阿姨';
+      this.title = '帮宝家政找阿姨';
     } else if (this.$route.path === '/Details') {
       this.title = '简历详情';
+    } else if (this.$route.path === '/Search') {
+      this.title = '搜索';
     }
+
   },
   methods: {
     backHistory() {
@@ -53,6 +56,10 @@ export default {
   height: 1rem;
   background: #3395ff;
   position: relative;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
 }
 .title-icon {
   color: #fff;

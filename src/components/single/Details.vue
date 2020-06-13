@@ -118,8 +118,14 @@
           alt=""
           @click="showPersonalDisplay(item, key)"
         />
-        <div class="mask"  @click="showPersonalDisplay(data.personalDisplayList_1[8], 8)" v-if="data.personalDisplayList.length > 9"></div>
-        <span class="push" v-if="data.personalDisplayList.length > 9">+{{ data.personalDisplayList.length }}</span>
+        <div
+          class="mask"
+          @click="showPersonalDisplay(data.personalDisplayList_1[8], 8)"
+          v-if="data.personalDisplayList.length > 9"
+        ></div>
+        <span class="push" v-if="data.personalDisplayList.length > 9"
+          >+{{ data.personalDisplayList.length }}</span
+        >
 
         <van-popup v-model="isShowPersonalDisplay">
           <v-touch
@@ -131,7 +137,9 @@
               <span
                 >{{ currentPages }}/{{ data.personalDisplayList.length }}</span
               >
-              <img :src="showPersonalDisplayUrl" alt="" />
+              <img style="width:100%;height:100%" :src="showPersonalDisplayUrl" alt="" />
+              <!-- <span class="iconfont left">&#xe613;</span>
+              <span class="iconfont right">&#xe614;</span> -->
             </div>
           </v-touch>
         </van-popup>
@@ -154,8 +162,14 @@
           alt=""
           @click="showCertificateDisplay(item, key)"
         />
-        <div class="mask"  @click="showCertificateDisplay(data.certificateDisplayList_1[8], 8)" v-if="data.certificateDisplayList.length > 9"></div>
-        <span class="push" v-if="data.certificateDisplayList.length > 9">+{{ data.certificateDisplayList.length }}</span>
+        <div
+          class="mask"
+          @click="showCertificateDisplay(data.certificateDisplayList_1[8], 8)"
+          v-if="data.certificateDisplayList.length > 9"
+        ></div>
+        <span class="push" v-if="data.certificateDisplayList.length > 9"
+          >+{{ data.certificateDisplayList.length }}</span
+        >
 
         <van-popup v-model="isShowCertificateDisplay">
           <v-touch
@@ -175,7 +189,7 @@
         </van-popup>
       </div>
     </div>
-    <div class="share" @click="showShare">立即分享</div>
+    <!-- <div class="share" @click="showShare">立即分享</div>-->
     <van-popup v-model="show" round="true">
       <div class="show-box">
         <img src="../../assets/img/weixin.png" alt="" @click="shareWeChat" />
@@ -211,54 +225,6 @@ export default {
       currentPages: 0,
       currentPages_1: 0,
       data: {}
-      // data: {
-      //   headPortraitUrl: require("../../assets/img/zhanwei.png"),
-      //   name: "张琴",
-      //   education: "小学",
-      //   genitals: "马",
-      //   constellation: "白羊座",
-      //   nation: "维吾尔族",
-      //   currentAddress: "北京海淀",
-      //   age: "41岁",
-      //   experiences: "2年",
-      //   native: "四川",
-      //   specialty: "做饭做家务｜能照顾小孩｜照顾老人",
-      //   introduceContent:
-      //     " 我以前丛事家政2到3年，能吃苦耐劳，为人和善，做事麻利，勤劳。愿意照顾老人，做家务",
-      //   jobStatus: "待岗",
-      //   jobType: "保姆/做饭阿姨",
-      //   intendedCity: "北京",
-      //   isHome: "住家/不住家",
-      //   experience: [
-      //     {
-      //       experiencetime: "其他 2018.08-2019.07",
-      //       experienceContent:
-      //         "在饭店做面点，专业饺子工；在饭店做面点，专业饺子工在饭店做面点，专业饺子工在饭店做面点，专业饺子工"
-      //     }
-      //   ],
-      //   personalDisplayList: [
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian1.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg")
-      //   ],
-      //   personalDisplayList_1: [],
-      //   certificateDisplayList: [
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian1.jpg"),
-      //     require("../../assets/img/tupian.jpg"),
-      //     require("../../assets/img/tupian.jpg")
-      //   ],
-      //   certificateDisplayList_1:[]
-      // }
     };
   },
   mounted() {
@@ -269,7 +235,7 @@ export default {
     ajax(ID) {
       const that = this;
       axios
-        .post("http://192.168.1.188:11112/hwWorkerNanny/findById", {
+        .post("https://api.verycleaner.com/hwWorkerNanny/findById", {
           id: ID
         })
         .then(function(response) {
@@ -294,29 +260,23 @@ export default {
         experiences: `${data.workWorkingYears}年`,
         native: data.nativePlace,
         specialty: "做饭做家务｜能照顾小孩｜照顾老人",
-        introduceContent:data.introduceOneselfTo,
+        introduceContent: data.introduceOneselfTo,
         jobStatus: this.processingjobStatus(data.workWorkingState),
         jobType: data.workHopeJob,
         intendedCity: data.cityName,
         isHome: `${data.isHome === 0 ? "不住家" : "住家"}`,
-        experience: [
-          {
-            experiencetime: "其他 2018.08-2019.07",
-            experienceContent:
-              "在饭店做面点，专业饺子工；在饭店做面点，专业饺子工在饭店做面点，专业饺子工在饭店做面点，专业饺子工"
-          }
-        ],
+        experience: data.hwExperienceVos,
         personalDisplayList: data.imageIds,
         personalDisplayList_1: this.processingImgList(data.imageIds),
         certificateDisplayList: data.imagePersonals,
-        certificateDisplayList_1:this.processingImgList(data.imagePersonals)
-      }
+        certificateDisplayList_1: this.processingImgList(data.imagePersonals)
+      };
     },
     // 截取10条图片
     processingImgList(data) {
       if (data.length > 9) {
         const list = [];
-        for(let i = 0; i < 9; i++) {
+        for (let i = 0; i < 9; i++) {
           list.push(data[i]);
         }
         return list;
@@ -327,13 +287,13 @@ export default {
     // 判断求职状态
     processingjobStatus(data) {
       if (data === 0) {
-        return '待岗';
+        return "待岗";
       }
       if (data === 1) {
-        return '已上岗';
+        return "已上岗";
       }
       if (data === 2) {
-        return '已回老家';
+        return "已回老家";
       }
     },
     showShare() {
@@ -434,6 +394,7 @@ export default {
 <style scoped>
 .max-box {
   background: #f5f5f5;
+  margin-top: 1rem;
 }
 .card-box {
   background: #fff;
@@ -543,7 +504,7 @@ export default {
   border-radius: 0.08rem;
   font-size: 0.32rem;
   text-align: center;
-  margin: 0 auto;
+  margin: 0 auto 0.2rem;
   color: #fff;
   font-weight: 600;
 }
@@ -607,7 +568,6 @@ export default {
   color: #fff;
   bottom: 1.1rem;
   right: 0.9rem;
-
 }
 .show-box {
   width: 5rem;
@@ -616,14 +576,37 @@ export default {
   text-align: center;
 }
 .isShowPersonalDisplay {
-  width: 6rem;
+  display: flex;
   position: relative;
 }
-.isShowPersonalDisplay span {
+.van-popup--cente, .van-popup {
+  width: 100%;
+}
+.isShowPersonalDisplay span:first-child {
   position: absolute;
   top: 0;
   color: #fff;
   font-size: 0.5rem;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
+}
+.left {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem;
+  left: 0;
+  height: 1rem;
+  width: 1rem;
+  display: inline-block;
+  color: #fff;
+}
+.right {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem;
+  right: 0;
+  height: 1rem;
+  width: 1rem;
+  display: inline-block;
+  color: #fff;
 }
 </style>
