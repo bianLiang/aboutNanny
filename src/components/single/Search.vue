@@ -106,9 +106,9 @@ export default {
   data() {
     return {
       value: "",
-      isRecommendedSearch: false,
+      isRecommendedSearch: true,
       isScreen: false,
-      isEmpty: true,
+      isEmpty: false,
       recommendedSearchList: ["育儿嫂", "保姆", "月嫂"],
       // 列表数据
       isLoading: false,

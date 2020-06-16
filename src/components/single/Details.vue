@@ -189,7 +189,7 @@
         </van-popup>
       </div>
     </div>
-    <!-- <div class="share" @click="showShare">立即分享</div>-->
+    <div class="share" @click="showShare">立即分享</div>
     <van-popup v-model="show" round="true">
       <div class="show-box">
         <img src="../../assets/img/weixin.png" alt="" @click="shareWeChat" />
@@ -229,7 +229,7 @@ export default {
   },
   mounted() {
     // 调用微信api
-    wxapi.wxRegister(this.wxRegCallback);
+    // wxapi.wxRegister(this.wxRegCallback);
   },
   methods: {
     ajax(ID) {
@@ -350,11 +350,11 @@ export default {
       this.wxShareTimeline();
     },
     // 调用微信api
-    wxRegCallback() {
-      // 用于微信JS-SDK回调
-      this.wxShareTimeline();
-      this.wxShareAppMessage();
-    },
+    // wxRegCallback() {
+    //   // 用于微信JS-SDK回调
+    //   this.wxShareTimeline();
+    //   this.wxShareAppMessage();
+    // },
     wxShareTimeline() {
       // 微信自定义分享到朋友圈
       let option = {
@@ -369,7 +369,8 @@ export default {
         }
       };
       // 将配置注入通用方法
-      wxapi.ShareTimeline(option);
+      // wxapi.ShareTimeline(option);
+      wxapi.wxRegister(option);
     },
     wxShareAppMessage() {
       // 微信自定义分享给朋友
@@ -570,7 +571,7 @@ export default {
   right: 0.9rem;
 }
 .show-box {
-  width: 5rem;
+  width: 100%;
   height: 2rem;
   line-height: 2rem;
   text-align: center;
