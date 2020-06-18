@@ -8,7 +8,7 @@
         placeholder="请输入搜索关键词"
         @click="clickSearch"
       />
-      <Screen></Screen>
+      <Screen @getScreen="getScreen"></Screen>
     </div>
     <div class="content-max-box">
       <van-pull-refresh
@@ -96,6 +96,9 @@ export default {
     showServiceModel() {
       this.$refs.mymodel.showModel();
     },
+    getScreen(data) {
+      console.log(data);
+    },
     ajax() {
       const that = this;
       if (that.isLoading) {
@@ -111,7 +114,6 @@ export default {
         })
         .then(function(response) {
           console.log(response.data.data);
-
           that.loading = false;
           if (response.data.data.list.length) {
             that.processingData(response.data.data.list);

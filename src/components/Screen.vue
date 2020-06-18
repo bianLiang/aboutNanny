@@ -289,6 +289,7 @@ export default {
     okPosition() {
       this.title_1 = '职位' +  this.selectPosition.length;
       this.$refs.itemPosition.toggle();
+      this.$emit('getScreen','调用了父组件');
     },
     okScreen() {
        this.title_2 = '筛选' +  this.screenSelectIndex;

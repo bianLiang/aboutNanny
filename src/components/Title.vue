@@ -1,5 +1,5 @@
 <template>
-  <div class="title-box">
+  <div class="title-box" v-if="isTitle">
     <span v-if="isIcon" class="iconfont title-icon" @click="backHistory"
       >&#xe613;</span
     >
@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       isIcon: false,
+      isTitle: true,
       title: "帮宝家政找阿姨"
     };
   },
@@ -31,7 +32,11 @@ export default {
     } else if (this.$route.path === '/Search') {
       this.title = '搜索';
     }
-
+    if (this.$route.path === "/PageOne" || this.$route.path === "/PageTwo") {
+      this.isTitle = false;
+    } else {
+      this.isTitle = true;
+    }
   },
   methods: {
     backHistory() {

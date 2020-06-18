@@ -234,8 +234,9 @@ export default {
   methods: {
     ajax(ID) {
       const that = this;
+      // https://api.verycleaner.com
       axios
-        .post("https://api.verycleaner.com/hwWorkerNanny/findById", {
+        .post("http://192.168.1.188:11112/hwWorkerNanny/findById", {
           id: ID
         })
         .then(function(response) {
