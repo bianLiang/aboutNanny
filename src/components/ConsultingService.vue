@@ -8,7 +8,7 @@
           <span class="iconfont" @click="showAddressSelect">&#xe614;</span>
         </div>
         <div class="phone">
-          <input maxlength="11" class="i-input" type="text" placeholder="请输入你的手机号">
+          <input maxlength="11" :value="phone" class="i-input" type="text" placeholder="请输入你的手机号">
         </div>
         <div class="btn-box">
            <van-button class="immediate" type="info" @click="immediateConsultation">立即咨询</van-button>
@@ -43,7 +43,8 @@ export default {
       isAreaList: false,
       isSuccess: false,
       address: '北京',
-      areaList: areaList
+      areaList: areaList,
+      phone: null
     };
   },
   methods: {
@@ -65,6 +66,8 @@ export default {
     },
     immediateConsultation() {
       console.log('提交咨询');
+      // address,
+      // phone
       this.isShowFrom = false;
       this.isSuccess = true;
     }

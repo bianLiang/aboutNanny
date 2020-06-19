@@ -108,7 +108,7 @@ export default {
         that.page = 0;
       }
       axios
-        .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
+        .post("http://192.168.1.188:11112/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize
         })

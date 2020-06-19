@@ -12,7 +12,7 @@
       >
         <template #action>
           <div @click="onSearch">
-            <van-button class="searchBtn" color="#3395FF">搜索</van-button>
+            <van-button class="searchBtn" color="#3395FF" @click="search">搜索</van-button>
           </div>
         </template>
       </van-search>
@@ -30,7 +30,7 @@
         </div>
       </div>
       <div v-if="isScreen">
-        <Screen></Screen>
+        <Screen @getScreen="getScreen"></Screen>
       </div>
     </div>
     <div class="content-max-box" v-if="isScreen">
@@ -122,7 +122,6 @@ export default {
     };
   },
   mounted() {
-    this.ajax();
   },
   methods: {
     onSearch() {},
@@ -147,7 +146,81 @@ export default {
         query: { ID: id }
       });
     },
-    ajax() {
+    search() {
+      const that = this;
+      this.dataList = [];
+      this.isLoading = false;
+      this.pageNo = 0;
+      this.page = 0;
+      axios
+        .post("http://192.168.1.188:11112/hwWorkerNanny/listAll", {
+          pageNo: that.pageNo,
+          pageSize: that.pageSize,
+          keyword: that.value
+        })
+        .then(function(response) {
+
+          if (response.data.data.list.length>0) {
+            that.isRecommendedSearch = false;
+            that.isScreen = true;
+            that.isEmpty = false;
+          } else {
+            that.isRecommendedSearch = false;
+            that.isScreen = false;
+            that.isEmpty = true;
+          }
+          that.loading = false;
+          if (response.data.data.list.length) {
+            that.processingData(response.data.data.list);
+            that.page += 1;
+            that.pageNo = that.page * that.pageSize - 1;
+          } else {
+            console.log("执行这里");
+            that.finished = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getScreen(data) {
+      console.log(data);
+      const that = this;
+      this.dataList = [];
+      this.isLoading = false;
+      this.pageNo = 0;
+      this.page = 0;
+      axios
+        .post("http://192.168.1.188:11112/hwWorkerNanny/listAll", {
+          pageNo: that.pageNo,
+          pageSize: that.pageSize,
+          keyword: that.value
+        })
+        .then(function(response) {
+          if (response.data.data.list.length>0) {
+            that.isRecommendedSearch = false;
+            that.isScreen = true;
+            that.isEmpty = false;
+          } else {
+            that.isRecommendedSearch = false;
+            that.isScreen = false;
+            that.isEmpty = true;
+          }
+          that.loading = false;
+          if (response.data.data.list.length) {
+            that.processingData(response.data.data.list);
+            that.page += 1;
+            that.pageNo = that.page * that.pageSize - 1;
+          } else {
+            console.log("执行这里");
+            that.finished = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    ajax(data) {
       const that = this;
       if (that.isLoading) {
         that.dataList = [];
@@ -158,11 +231,10 @@ export default {
       axios
         .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
-          pageSize: that.pageSize
+          pageSize: that.pageSize,
+          keyword: that.value
         })
         .then(function(response) {
-          console.log(response.data.data);
-
           that.loading = false;
           if (response.data.data.list.length) {
             that.processingData(response.data.data.list);
