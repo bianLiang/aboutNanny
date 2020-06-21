@@ -85,6 +85,10 @@
         <div class="phone">
           <input maxlength="11" :value="phone" class="i-input" type="text" placeholder="请输入你的手机号">
         </div>
+        <div class="verification-box">
+          <input maxlength="6" class="verification" :value="verification" type="text">
+          <van-button class="verification-btn" type="default">获取验证码</van-button>
+        </div>
       </div>
       <div v-if="isAreaList">
         <van-area title="请选择" @cancel="cancel" @confirm="confirm" :area-list="areaList" :columns-num="2" />
@@ -110,6 +114,8 @@ export default {
       isShowFrom: true,
       isAreaList: false,
       address: '北京',
+      phone: null,
+      verification: null,
       areaList: areaList,
       serverList: [
         {
@@ -327,10 +333,26 @@ export default {
   text-align: center;
 }
 .i-input {
-  width: 90%;
+  width: 100%;
   font-size: 0.32rem;
   height: 0.88rem;
   margin: 0 auto;
   padding-left: 0.2rem;
+}
+.verification-box {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.3rem 0;
+}
+.verification {
+  height: 0.88rem;
+  width: 60%;
+  padding-left: 0.2rem;
+}
+.verification-btn {
+  border-radius:0.08rem;
+  border:0.02rem solid rgba(213,213,213,1);
+  height: 0.88rem;
+  color: #999999;
 }
 </style>

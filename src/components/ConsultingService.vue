@@ -24,6 +24,14 @@
          <van-button class="immediate" type="info" @click="showModel">我知道了</van-button>
       </div>
     </van-action-sheet>
+    <van-action-sheet v-model="phoneShow" round="false">
+      <div class="content" v-if="isShowFrom">
+        <div class="title-1">{{callPhoneText}}</div>
+        <div class="btn-box">
+           <van-button class="immediate" type="info" @click="callPhone">立即咨询</van-button>
+        </div>
+      </div>
+    </van-action-sheet>
   </div>
 </template>
 <script>
@@ -39,17 +47,23 @@ export default {
   data() {
     return {
       show: false,
+      phoneShow:false,
       isShowFrom: true,
       isAreaList: false,
       isSuccess: false,
       address: '北京',
       areaList: areaList,
-      phone: null
+      phone: null,
+      callPhoneText:null
     };
   },
   methods: {
     showModel() {
       this.show = !this.show;
+    },
+    onPhoneShow(callPhone) {
+      this.callPhoneText = callPhone;
+      this.phoneShow = !this.show;
     },
     showAddressSelect() {
       this.isShowFrom = false;
@@ -64,12 +78,28 @@ export default {
       this.isShowFrom = true;
       this.address = e[0].name + e[1].name;
     },
+    callPhone() {
+      window.location.href = "tel://" + this.callPhoneText;
+    },
     immediateConsultation() {
       console.log('提交咨询');
       // address,
       // phone
-      this.isShowFrom = false;
-      this.isSuccess = true;
+      const that = this;
+      axios
+        .post("https://api.verycleaner.com/hwNannyPhone/insert", {
+          cityName: that.address,
+          phone: that.phone
+
+        })
+        .then(function(response) {
+          console.log(response.data.data);
+          that.isShowFrom = false;
+          that.isSuccess = true;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   }
 };
@@ -80,6 +110,12 @@ export default {
 }
 .title {
   font-size: 0.28rem;
+  color: #3395FF;
+  text-align: center;
+  margin: 0.4rem 0 0.1rem 0;
+}
+.title-1 {
+  font-size: 0.6rem;
   color: #3395FF;
   text-align: center;
   margin: 0.4rem 0 0.1rem 0;

@@ -4,6 +4,7 @@
       >&#xe613;</span
     >
     <p class="title">{{ title }}</p>
+    <span v-if="isIcon" class="shouye iconfont" @click="backHome">&#xe677;</span>
   </div>
 </template>
 <script>
@@ -13,7 +14,7 @@ export default {
     return {
       isIcon: false,
       isTitle: true,
-      title: "帮宝家政找阿姨"
+      title: "帮宝家政阿姨简历库"
     };
   },
   watch: {
@@ -26,7 +27,7 @@ export default {
       this.isIcon = true;
     }
     if (this.$route.path === '/') {
-      this.title = '帮宝家政找阿姨';
+      this.title = '帮宝家政阿姨简历库';
     } else if (this.$route.path === '/Details') {
       this.title = '简历详情';
     } else if (this.$route.path === '/Search') {
@@ -40,7 +41,12 @@ export default {
   },
   methods: {
     backHistory() {
-      this.$router.go(-1); //返回上一层
+      this.$router.back(); //返回上一层
+    },
+    backHome() {
+       this.$router.push({
+        name: "Home"
+      });
     },
     onIsShowIcon() {
       if (this.$route.path === "/") {
@@ -70,6 +76,14 @@ export default {
   color: #fff;
   font-size: 0.36rem;
   position: absolute;
+  left: 0.2rem;
+}
+.shouye {
+  color: #fff;
+  font-size: 0.36rem;
+  position: absolute;
+  right: 0.2rem;
+  top: 0;
 }
 .title {
   color: #fff;

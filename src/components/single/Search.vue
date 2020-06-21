@@ -54,8 +54,8 @@
               @click="onClickList(item.id)"
             >
               <div class="li-box">
-                <div class="seize">
-                  <img v-bind:src="item.headPortraitUrl" alt="" />
+                <div class="seize" :style="{backgroundImage: 'url(' + (item.headPortraitUrl ? item.headPortraitUrl : '../../assets/img/zhanwei.png') + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}">
+                  <!-- <img v-bind:src="item.headPortraitUrl" alt="" /> -->
                 </div>
                 <div class="content-box">
                   <div class="information-box">
@@ -66,7 +66,7 @@
                       <p class="working-years">{{ item.workingYears }}</p>
                     </div>
                     <div>
-                      <!-- <p class="consulting-btn">立即咨询</p> -->
+                      <p class="consulting-btn" @click.prevent.stop="showServiceModel">立即咨询</p>
                     </div>
                   </div>
                   <div class="intention-box">
@@ -89,10 +89,12 @@
       <p>没有搜索到您输入的内容</p>
       <p>换个词试下吧～</p>
     </div>
+    <ConsultingService ref="mymodel" ></ConsultingService>
   </div>
 </template>
 <script>
 import { PullRefresh, List, Search, Button } from "vant";
+import ConsultingService from "../ConsultingService";
 import Screen from "../Screen";
 export default {
   name: "Search",
@@ -101,7 +103,8 @@ export default {
     [List.name]: List,
     [Search.name]: Search,
     [Button.name]: Button,
-    Screen
+    Screen,
+    ConsultingService
   },
   data() {
     return {
@@ -118,12 +121,16 @@ export default {
       dataList: [],
       pageNo: 0,
       page: 0,
-      pageSize: 5
+      pageSize: 5,
+      datas: {jobTypeList:[], cityNameList:[], experience: null,age:null, education:null, isMarriage:null}
     };
   },
   mounted() {
   },
   methods: {
+    showServiceModel() {
+      this.$refs.mymodel.showModel();
+    },
     onSearch() {},
     clickrecommendedSearchBtn(item) {
       this.value = item;
@@ -152,11 +159,18 @@ export default {
       this.isLoading = false;
       this.pageNo = 0;
       this.page = 0;
+      this.datas = {jobTypeList:[], cityNameList:[], experience: null,age:null, education:null, isMarriage:null};
       axios
-        .post("http://192.168.1.188:11112/hwWorkerNanny/listAll", {
+        .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize,
-          keyword: that.value
+          keyword: that.value? that.value: null,
+          jobTypeList: that.datas.jobTypeList.length > 0? that.datas.jobTypeList: null,
+          cityNameList: that.datas.cityNameList.length > 0? that.datas.cityNameList: null,
+          experience: that.datas.experience? that.datas.experience: null,
+          age: that.datas.age? that.datas.age: null,
+          education: that.datas.education? that.datas.education: null,
+          isMarriage: that.datas.marriage? that.datas.marriage: null,
         })
         .then(function(response) {
 
@@ -190,11 +204,18 @@ export default {
       this.isLoading = false;
       this.pageNo = 0;
       this.page = 0;
+      this.datas = data;
       axios
-        .post("http://192.168.1.188:11112/hwWorkerNanny/listAll", {
+        .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize,
-          keyword: that.value
+          keyword: that.value? that.value: null,
+          jobTypeList: that.datas.jobTypeList.length > 0? that.datas.jobTypeList: null,
+          cityNameList: that.datas.cityNameList.length > 0? that.datas.cityNameList: null,
+          experience: that.datas.experience? that.datas.experience: null,
+          age: that.datas.age? that.datas.age: null,
+          education: that.datas.education? that.datas.education: null,
+          isMarriage: that.datas.marriage? that.datas.marriage: null,
         })
         .then(function(response) {
           if (response.data.data.list.length>0) {
@@ -232,7 +253,13 @@ export default {
         .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize,
-          keyword: that.value
+          keyword: that.value? that.value: null,
+          jobTypeList: that.datas.jobTypeList.length > 0? that.datas.jobTypeList: null,
+          cityNameList: that.datas.cityNameList.length > 0? that.datas.cityNameList: null,
+          experience: that.datas.experience? that.datas.experience: null,
+          age: that.datas.age? that.datas.age: null,
+          education: that.datas.education? that.datas.education: null,
+          isMarriage: that.datas.marriage? that.datas.marriage: null,
         })
         .then(function(response) {
           that.loading = false;
@@ -256,8 +283,8 @@ export default {
           headPortraitUrl: data[i].imageWork
             ? data[i].imageWork
             : require("../../assets/img/zhanwei.png"),
-          name: data[i].name,
-          age: data[i].age + "岁",
+          name: data[i].name? data[i].name : '无',
+          age: data[i].age? data[i].age + "岁" : 0 + "岁",
           address: data[i].native_place,
           workingYears: `从业${data[i].workWorkingYears}年`,
           intention: `${data[i].isHome === 0 ? "不住家" : "住家"}|${
@@ -331,14 +358,15 @@ export default {
 }
 .li-box {
   display: flex;
-  padding: 0.13rem 0.13rem 0.33rem 0.13rem;
+  padding: 0.13rem 0.3rem 0.33rem 0.3rem;
   margin: 0.3rem 0;
   border-bottom: 0.01rem solid #d5d5d5;
 }
 .seize {
-  width: 1.5rem;
+  width: 2rem;
   height: 2rem;
   display: flex;
+  margin-right: 0.2rem;
 }
 .content-box {
   height: 2rem;
@@ -348,6 +376,7 @@ export default {
 }
 .name-box {
   display: flex;
+  align-items: center;
 }
 .name {
   font-size: 0.28rem;
@@ -379,6 +408,9 @@ export default {
   border: none;
   text-align: center;
   margin-left: 1.1rem;
+  position: absolute;
+  right: 0.3rem;
+  z-index: 1;
 }
 .intention-box {
   margin: 0.23rem 0.1rem;

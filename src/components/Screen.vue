@@ -7,7 +7,7 @@
             <p class="position-title">
               <span>服务职位</span>&nbsp;<span>(最多选3个)</span>
             </p>
-            <div>
+            <div class="content-btn-box">
               <button
                 class="content-btn"
                 v-for="(item, index) in positionList"
@@ -27,28 +27,28 @@
         <van-dropdown-item :title="title_2" ref="itemScreen">
           <div class="position-box">
             <p class="screen-title"><span>经验要求</span></p>
-            <div>
+            <div  class="content-btn-box">
               <button class="content-btn"
                 v-for="(item, index) in screen.experienceList"
                 :key="item"
                 :class="{ active: item.active }" @click="clickExperienceBtn(index)">{{ item.name }}</button>
             </div>
             <p class="screen-title"><span>年龄要求</span></p>
-            <div>
+            <div  class="content-btn-box">
               <button class="content-btn"
                 v-for="(item, index) in screen.ageList"
                 :key="item"
                 :class="{ active: item.active }" @click="clickAgeBtn(index)">{{ item.name }}</button>
             </div>
             <p class="screen-title"><span>学历要求</span></p>
-            <div>
+            <div  class="content-btn-box">
               <button class="content-btn"
                 v-for="(item, index) in screen.educationList"
                 :key="item"
                 :class="{ active: item.active }" @click="clickEducationBtn(index)">{{ item.name }}</button>
             </div>
             <p class="screen-title"><span>婚姻状态</span></p>
-            <div>
+            <div  class="content-btn-box">
               <button class="content-btn"
                 v-for="(item, index) in screen.marriageList"
                 :key="item"
@@ -65,7 +65,7 @@
             <p class="position-title">
               <span>全部城市</span>&nbsp;<span>(最多选3个)</span>
             </p>
-            <div>
+            <div  class="content-btn-box">
               <button
                 class="content-btn"
                 v-for="(item, index) in nativePlaceList"
@@ -247,7 +247,8 @@ export default {
       if (this.marriage === '') {
         this.screenSelectIndex++
       }
-      this.marriage = this.screen.marriageList[index].name;
+      // this.marriage = this.screen.marriageList[index].name;
+      this.marriage = index + 1;
 
     },
 
@@ -289,17 +290,20 @@ export default {
     okPosition() {
       this.title_1 = '职位' +  this.selectPosition.length;
       this.$refs.itemPosition.toggle();
-      this.$emit('getScreen',this.selectPosition);
+      const obj = {jobTypeList:this.selectPosition, cityNameList:[], experience: null,age:null, education:null, isMarriage:null}
+      this.$emit('getScreen', obj);
     },
     okScreen() {
        this.title_2 = '筛选' +  this.screenSelectIndex;
        this.$refs.itemScreen.toggle();
-       this.$emit('getScreen',{experience:this.experience,age:this.age,education:this.education,marriage:this.marriage});
+       const obj = {jobTypeList:[], cityNameList:[], experience: this.experience,age:this.age, education:this.education, isMarriage:this.marriage}
+       this.$emit('getScreen',obj);
     },
     okNativePlace() {
       this.title_3 = '籍贯' +  this.selectNativePlace.length;
       this.$refs.itemNativePlace.toggle();
-      this.$emit('getScreen',this.selectNativePlace);
+      const obj = {jobTypeList:[], cityNameList:this.selectNativePlace, experience: null,age:null, education:null, isMarriage:null}
+      this.$emit('getScreen',obj);
     }
   }
 };
@@ -326,6 +330,9 @@ export default {
   margin: 0 auto;
   padding-bottom: 0.8rem;
   border-bottom: 0.02rem #d5d5d5 solid;
+}
+.content-btn-box {
+  line-height: 0.5rem;
 }
 .content-btn {
   border-radius: 0.2rem;

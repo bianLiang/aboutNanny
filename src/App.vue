@@ -1,7 +1,13 @@
 <template>
   <div id="app">
     <Title ref="myTitle" />
-    <router-view />
+    <!-- <keep-alive>
+      <router-view />
+    </keep-alive> -->
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
@@ -18,7 +24,7 @@ export default {
       if (to.path === "/Details") {
         this.$refs.myTitle.changeTitle("简历详情");
       } else if (to.path === "/") {
-        this.$refs.myTitle.changeTitle("帮宝家政找阿姨");
+        this.$refs.myTitle.changeTitle("帮宝家政阿姨简历库");
       } else if (this.$route.path === "/Search") {
         this.$refs.myTitle.changeTitle("搜索");
       }

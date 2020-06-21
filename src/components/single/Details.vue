@@ -2,8 +2,10 @@
   <div class="max-box">
     <div class="card-box">
       <div style="display: flex;">
-        <div class="seize">
+        <!-- <div class="seize">
           <img v-bind:src="data.headPortraitUrl" alt="" />
+        </div> -->
+        <div class="seize" :style="{backgroundImage: 'url(' + (data.headPortraitUrl ? data.headPortraitUrl : '../../assets/img/zhanwei.png') + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}">
         </div>
         <div class="card-content">
           <div>
@@ -53,7 +55,7 @@
         /><span>自我介绍</span>
       </div>
       <div>
-        <p class="introduce-specialty">{{ data.specialty }}</p>
+        <!-- <p class="introduce-specialty">{{ data.specialty }}</p> -->
       </div>
       <div>
         <p class="introduce-content">{{ data.introduceContent }}</p>
@@ -189,7 +191,14 @@
         </van-popup>
       </div>
     </div>
-    <div class="share" @click="showShare">立即分享</div>
+    <div class="share-box">
+      <div class="icon-box" @click="showShare">
+        <span class="iconfont share-icon">&#xe623;</span>
+        <span class="share-icon">分享</span>
+      </div>
+      <div class="share" @click="showServiceModel">立即预约</div>
+    </div>
+    <ConsultingService ref="mymodel" ></ConsultingService>
     <van-popup v-model="show" round="true">
       <div class="show-box">
         <img src="../../assets/img/weixin.png" alt="" @click="shareWeChat" />
@@ -205,10 +214,12 @@
 <script>
 import { Popup } from "vant";
 import wxapi from "@/api/wxapi.js";
+import ConsultingService from "../ConsultingService";
 export default {
   name: "Details",
   components: {
-    [Popup.name]: Popup
+    [Popup.name]: Popup,
+    ConsultingService
   },
   created() {
     // 获取id
@@ -236,7 +247,7 @@ export default {
       const that = this;
       // https://api.verycleaner.com
       axios
-        .post("http://192.168.1.188:11112/hwWorkerNanny/findById", {
+        .post("https://api.verycleaner.com/hwWorkerNanny/findById", {
           id: ID
         })
         .then(function(response) {
@@ -270,7 +281,8 @@ export default {
         personalDisplayList: data.imageIds,
         personalDisplayList_1: this.processingImgList(data.imageIds),
         certificateDisplayList: data.imagePersonals,
-        certificateDisplayList_1: this.processingImgList(data.imagePersonals)
+        certificateDisplayList_1: this.processingImgList(data.imagePersonals),
+        callPhone: data.phone
       };
     },
     // 截取10条图片
@@ -284,6 +296,9 @@ export default {
       } else {
         return data;
       }
+    },
+    showServiceModel() {
+      this.$refs.mymodel.onPhoneShow(this.data.callPhone);
     },
     // 判断求职状态
     processingjobStatus(data) {
@@ -499,16 +514,35 @@ export default {
   font-size: 0.28rem;
 }
 .share {
-  width: 6.9rem;
+  width: 4.5rem;
   height: 0.78rem;
   line-height: 0.78rem;
   background: rgba(51, 149, 255, 1);
   border-radius: 0.08rem;
   font-size: 0.32rem;
   text-align: center;
-  margin: 0 auto 0.2rem;
+  /**margin: 0 auto 0.2rem;*/
   color: #fff;
   font-weight: 600;
+}
+.share-box {
+  display: flex;
+  background: #fff;
+  padding: 0.2rem 0;
+  align-items: center;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+.icon-box {
+  display: flex;
+  align-items: baseline;
+}
+.share-icon {
+  color: #3395FF;
+  font-size: 0.28rem;
+  margin: 0 0.1rem;
 }
 .education span:first-child,
 .genitals span:first-child,

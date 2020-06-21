@@ -14,17 +14,26 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      meta: {
+        keepAlive: false
+      },
     },
     {
       path: '/Details',
       name: 'Details',
-      component: Details
+      component: Details,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/Search',
       name: 'Search',
-      component: Search
+      component: Search,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/PageOne',
