@@ -292,18 +292,21 @@ export default {
       this.$refs.itemPosition.toggle();
       const obj = {jobTypeList:this.selectPosition, cityNameList:[], experience: null,age:null, education:null, isMarriage:null}
       this.$emit('getScreen', obj);
+      this.$router.meta.isBack = false;
     },
     okScreen() {
        this.title_2 = '筛选' +  this.screenSelectIndex;
        this.$refs.itemScreen.toggle();
        const obj = {jobTypeList:[], cityNameList:[], experience: this.experience,age:this.age, education:this.education, isMarriage:this.marriage}
        this.$emit('getScreen',obj);
+       this.$router.meta.isBack = false;
     },
     okNativePlace() {
       this.title_3 = '籍贯' +  this.selectNativePlace.length;
       this.$refs.itemNativePlace.toggle();
       const obj = {jobTypeList:[], cityNameList:this.selectNativePlace, experience: null,age:null, education:null, isMarriage:null}
       this.$emit('getScreen',obj);
+      this.$router.meta.isBack = false;
     }
   }
 };

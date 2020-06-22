@@ -106,6 +106,15 @@ export default {
     Screen,
     ConsultingService
   },
+  beforeRouteLeave(to, from, next) {
+    console.log(to.name);
+    next();
+  },
+   activated() {
+    if (!this.$router.meta.isBack) {
+      this.ajax()
+    }
+  },
   data() {
     return {
       value: "",
@@ -157,6 +166,8 @@ export default {
       const that = this;
       this.dataList = [];
       this.isLoading = false;
+      that.loading = true,
+      that.finished = false,
       this.pageNo = 0;
       this.page = 0;
       this.datas = {jobTypeList:[], cityNameList:[], experience: null,age:null, education:null, isMarriage:null};
@@ -202,6 +213,8 @@ export default {
       const that = this;
       this.dataList = [];
       this.isLoading = false;
+      that.loading = true,
+      that.finished = false,
       this.pageNo = 0;
       this.page = 0;
       this.datas = data;
@@ -288,9 +301,9 @@ export default {
           address: data[i].native_place,
           workingYears: `从业${data[i].workWorkingYears}年`,
           intention: `${data[i].isHome === 0 ? "不住家" : "住家"}|${
-            data[i].workHopeJob
-          }|${data[i].nativePlace}`,
-          specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦",
+            data[i].workHopeJob? data[i].workHopeJob: '无'
+          }|${data[i].nativePlace? data[i].nativePlace : '无'}`,
+          specialty: data[i].introduceOneselfTo? data[i].introduceOneselfTo : '',
           id: data[i].id
         });
       }

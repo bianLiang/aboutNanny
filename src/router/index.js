@@ -16,23 +16,22 @@ export default new Router({
       name: 'Home',
       component: Home,
       meta: {
-        keepAlive: false
+        keepAlive: true,
+        isBack: true
       },
     },
     {
       path: '/Details',
       name: 'Details',
-      component: Details,
-      meta: {
-        keepAlive: true
-      }
+      component: Details
     },
     {
       path: '/Search',
       name: 'Search',
       component: Search,
       meta: {
-        keepAlive: true
+        keepAlive: true,
+        isBack: true
       }
     },
     {

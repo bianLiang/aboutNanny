@@ -81,12 +81,19 @@ export default {
     ConsultingService
   },
   beforeRouteLeave(to, from, next) {
-    if (to.name == "Detail") {
-        from.meta.keepAlive = true;
-      } else {
-        from.meta.keepAlive = false;
-      }
+    console.log(to.name);
+    to.meta.isBack = true;
+    // if (to.name == "Home") {
+    //     from.meta.keepAlive = true;
+    //   } else {
+    //     from.meta.keepAlive = false;
+    //   }
     next();
+  },
+  activated() {
+    if (!this.$router.meta.isBack) {
+      this.ajax()
+    }
   },
   data() {
     return {
@@ -104,6 +111,7 @@ export default {
     };
   },
   mounted() {
+    console.log('执行');
     this.ajax();
   },
   methods: {
@@ -114,6 +122,8 @@ export default {
       const that = this;
       that.dataList = [];
       that.isLoading = false;
+      that.loading = true,
+      that.finished = false,
       that.pageNo = 0;
       that.page = 0;
       that.datas = data;
@@ -206,9 +216,9 @@ export default {
           address: data[i].native_place,
           workingYears: `从业${data[i].workWorkingYears? data[i].workWorkingYears : 0}年`,
           intention: `${data[i].isHome === 0 ? "不住家" : "住家"}|${
-            data[i].workHopeJob
-          }|${data[i].nativePlace}`,
-          specialty: "做饭做家务｜能照顾小孩｜照顾老人啦啦啦啦啦啦",
+            data[i].workHopeJob? data[i].workHopeJob: '无'
+          }|${data[i].nativePlace? data[i].nativePlace : '无'}`,
+          specialty: data[i].introduceOneselfTo? data[i].introduceOneselfTo: '',
           id: data[i].id
         });
       }
@@ -289,6 +299,15 @@ export default {
 }
 .specialty-box {
   margin: 0 0.1rem;
+  width: 4rem;
+
+ text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 .seize {
   width: 2rem;

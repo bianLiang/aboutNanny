@@ -22,7 +22,7 @@
         <div class="bianzu-item">
           <img src="../../assets/img/编组 2.png" alt="">
           <span>8000+</span>
-          <span>加盟店铺</span>
+          <span>线下门店</span>
         </div>
         <div class="bianzu-item">
           <img src="../../assets/img/编组 3.png" alt="">
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div class="matching-box">
-        <van-button class="matching" type="info" @click="onNext">下一步</van-button>
+        <van-button class="matching-s" type="info" @click="onNext">下一步</van-button>
       </div>
     </div>
     <div class="three-page-box" v-if="isThreePage">
@@ -87,8 +87,11 @@
         </div>
         <div class="verification-box">
           <input maxlength="6" class="verification" :value="verification" type="text">
-          <van-button class="verification-btn" type="default">获取验证码</van-button>
+          <van-button  @click="onVerificationBtn" :disabled="verificationDisabled" class="verification-btn" type="default">{{verificationText}}</van-button>
         </div>
+        <div class="matching-box">
+        <van-button class="matching-s" type="info" @click="onMatching">一键匹配阿姨</van-button>
+      </div>
       </div>
       <div v-if="isAreaList">
         <van-area title="请选择" @cancel="cancel" @confirm="confirm" :area-list="areaList" :columns-num="2" />
@@ -117,6 +120,8 @@ export default {
       phone: null,
       verification: null,
       areaList: areaList,
+      verificationText: '获取验证码',
+      verificationDisabled: false,
       serverList: [
         {
           url:require("../../assets/img/位图.png"),
@@ -190,6 +195,20 @@ export default {
       this.isAreaList = false;
       this.isShowFrom = true;
       this.address = e[0].name + e[1].name;
+    },
+    onVerificationBtn() {
+      const that = this;
+      this.verificationDisabled = true;
+      let index = 60;
+      const timer = setInterval(() => {
+        index--;
+        that.verificationText = index + 's'
+        if (index === 0) {
+          window.clearInterval(timer)
+          that.verificationDisabled = false;
+          that.verificationText = '获取验证码';
+        }
+      },1000);
     }
   },
 }
@@ -264,6 +283,11 @@ export default {
   font-size: 0.36rem;
   color: #fff;
   width: 90%;
+  }
+  .matching-s {
+    font-size: 0.36rem;
+    color: #fff;
+    width: 100%;
   }
   .select {
     font-family:PingFangSC-Semibold,PingFang SC;
@@ -354,5 +378,6 @@ export default {
   border:0.02rem solid rgba(213,213,213,1);
   height: 0.88rem;
   color: #999999;
+  width: 2rem;
 }
 </style>

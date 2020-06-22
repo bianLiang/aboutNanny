@@ -112,14 +112,16 @@
         /><span>个人展示</span>
       </div>
       <div class="img-box">
-        <img
+        <!-- <img
           v-for="(item, key) in data.personalDisplayList_1"
           :key="key"
           class="img"
           :src="item"
           alt=""
           @click="showPersonalDisplay(item, key)"
-        />
+        /> -->
+        <div @click="showPersonalDisplay(item, key)" v-for="(item, key) in data.personalDisplayList_1" :key="key" class="img"  :style="{backgroundImage: 'url(' + (item) + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}">
+        </div>
         <div
           class="mask"
           @click="showPersonalDisplay(data.personalDisplayList_1[8], 8)"
@@ -156,14 +158,15 @@
         /><span>证件展示</span>
       </div>
       <div class="img-box">
-        <img
+        <!-- <img
           v-for="(item, key) in data.certificateDisplayList_1"
           :key="item"
           class="img"
           :src="item"
           alt=""
           @click="showCertificateDisplay(item, key)"
-        />
+        /> -->
+        <div @click="showCertificateDisplay(item, key)" v-for="(item, key) in data.certificateDisplayList_1" :key="key" class="img"  :style="{backgroundImage: 'url(' + (item) + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}"></div>
         <div
           class="mask"
           @click="showCertificateDisplay(data.certificateDisplayList_1[8], 8)"
@@ -226,6 +229,17 @@ export default {
     console.log(this.$route.query);
     this.ajax(this.$route.query.ID);
   },
+   beforeRouteLeave(to, from, next) {
+     console.log(to.name)
+     to.meta.isBack = false;
+    //  from.meta.keepAlive = true;
+    // if (to.name == "Home" ) {
+    //     from.meta.keepAlive = true;
+    //   } else {
+    //     from.meta.keepAlive = false;
+    //   }
+    next();
+  },
   data() {
     return {
       show: false,
@@ -247,7 +261,7 @@ export default {
       const that = this;
       // https://api.verycleaner.com
       axios
-        .post("https://api.verycleaner.com/hwWorkerNanny/findById", {
+        .post("http://192.168.92.1:11112/hwWorkerNanny/findById", {
           id: ID
         })
         .then(function(response) {
@@ -268,8 +282,8 @@ export default {
         constellation: data.constellation,
         nation: data.nation,
         currentAddress: data.address,
-        age: `${data.age}岁`,
-        experiences: `${data.workWorkingYears}年`,
+        age: `${data.age?data.age : 0}岁`,
+        experiences: `${data.workWorkingYears?data.workWorkingYears: 0}年`,
         native: data.nativePlace,
         specialty: "做饭做家务｜能照顾小孩｜照顾老人",
         introduceContent: data.introduceOneselfTo,
@@ -278,10 +292,10 @@ export default {
         intendedCity: data.cityName,
         isHome: `${data.isHome === 0 ? "不住家" : "住家"}`,
         experience: data.hwExperienceVos,
-        personalDisplayList: data.imageIds,
-        personalDisplayList_1: this.processingImgList(data.imageIds),
-        certificateDisplayList: data.imagePersonals,
-        certificateDisplayList_1: this.processingImgList(data.imagePersonals),
+        personalDisplayList: data.imagePersonals,
+        personalDisplayList_1: this.processingImgList(data.imagePersonals),
+        certificateDisplayList: data.imageIds,
+        certificateDisplayList_1: this.processingImgList(data.imageIds),
         callPhone: data.phone
       };
     },
@@ -360,9 +374,10 @@ export default {
         ];
       }
     },
-    shareWeChat() {},
+    shareWeChat() {
+      this.wxShareAppMessage();
+    },
     shareMoments() {
-      console.log("点击了");
       this.wxShareTimeline();
     },
     // 调用微信api
@@ -391,10 +406,10 @@ export default {
     wxShareAppMessage() {
       // 微信自定义分享给朋友
       let option = {
-        title: "限时团购周 挑战最低价", // 分享标题, 请自行替换
-        desc: "限时团购周 挑战最低价", // 分享描述, 请自行替换
+        title: "某某阿姨简历", // 分享标题, 请自行替换
+        desc: "做饭做家务｜能照顾小孩｜照顾老人", // 分享描述, 请自行替换
         link: window.location.href.split("#")[0], // 分享链接，根据自身项目决定是否需要split
-        imgUrl: "logo.png", // 分享图标, 请自行替换，需要绝对路径
+        imgUrl: this.data.headPortraitUrl, // 分享图标, 请自行替换，需要绝对路径
         success: () => {
           alert("分享成功");
         },
@@ -403,7 +418,8 @@ export default {
         }
       };
       // 将配置注入通用方法
-      wxapi.ShareAppMessage(option);
+      // wxapi.ShareAppMessage(option);
+      wxapi.wxRegister(option);
     }
   }
 };
@@ -587,6 +603,7 @@ export default {
   height: 2.1rem;
   border-radius: 8px;
   margin-right: 0.05rem;
+  display: inline-block;
 }
 .mask {
   width: 2.1rem;

@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <Title ref="myTitle" />
-    <!-- <keep-alive>
-      <router-view />
-    </keep-alive> -->
+      <!-- <router-view /> -->
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
