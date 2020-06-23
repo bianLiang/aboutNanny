@@ -11,9 +11,9 @@ const wxApi = {
    */
   wxRegister(option) {
     // 这边的接口请换成你们自己的
+    const that = this;
     axios.post(
-      // "https://api.verycleaner.com/weixin/fx/listFatherUsed",
-      "https://api.verycleaner.com/weixin/fx/listFatherUsed",
+      that.API.serverApi + "/weixin/fx/listFatherUsed",
       { reqUrl: window.location.href }
       //{ timeout: 5000, withCredentials: true }
     )

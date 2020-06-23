@@ -3,7 +3,7 @@
     <div>
       <div><img src="../../assets/img/zhu_2.png" alt=""></div>
       <div class="form">
-        <p>请填写您的手机号，专业顾问24小时为您服务</p>
+        <p id="matching">请填写您的手机号，专业顾问24小时为您服务</p>
         <div v-if="isShowFrom">
           <div style="margin: 0.2rem 0;" class="address">
             <input :value="address" placeholder="选择地址" readonly="readonly" class="i-input" type="text">
@@ -20,9 +20,31 @@
             <input :value="server" placeholder="选择服务" readonly="readonly" class="i-input" type="text">
             <span class="iconfont" @click="showServe">&#xe614;</span>
           </div>
-          <div class="matching-box">
+          <div  class="matching-box">
             <van-button class="matching-s" type="info" @click="onMatching">一键匹配阿姨</van-button>
           </div>
+        </div>
+      </div>
+      <div  class="img-max">
+        <img src="../../assets/img/bianzu7.png" alt="">
+      </div>
+      <div class="img-max">
+        <img class="img" src="../../assets/img/biaoti.png" alt="">
+        <div class="img-min">
+          <img src="../../assets/img/beijin.png" alt="">
+          <a href="#matching">立即匹配</a>
+        </div>
+        <div class="img-min">
+          <img src="../../assets/img/baoxian.png" alt="">
+          <a href="#matching">立即匹配</a>
+        </div>
+        <div class="img-min">
+          <img src="../../assets/img/jineng.png" alt="">
+          <a href="#matching">立即匹配</a>
+        </div>
+        <div class="img-min">
+          <img src="../../assets/img/mianfei.png" alt="">
+          <a href="#matching">立即匹配</a>
         </div>
       </div>
       <div v-if="isAreaList">
@@ -143,12 +165,12 @@ export default {
 .phone {
   text-align: center;
   line-height: 0;
-  margin: 0.3rem 0;
+  margin: 0.2rem 0 0.1rem;
 }
 .verification-box {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.02rem;
 }
 .verification {
   height: 0.88rem;
@@ -169,5 +191,29 @@ export default {
     font-size: 0.36rem;
     color: #fff;
     width: 100%;
+  }
+  .img-min {
+    position: relative;
+  }
+  .img-max {
+    text-align: center;
+  }
+  .img {
+    width: 80%;
+  }
+  .img-min a {
+    position: absolute;
+    display: inline-block;
+    background:rgba(24,144,255,1);
+    font-size:0.28rem;
+    font-family:PingFangSC-Semibold,PingFang SC;
+    top: 0.3rem;
+    right: 0.6rem;
+    color: #fff;
+    width: 1.5rem;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    text-align: center;
+    border-radius: 0.5rem;
   }
 </style>

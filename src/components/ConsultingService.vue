@@ -87,7 +87,7 @@ export default {
       // phone
       const that = this;
       axios
-        .post("https://api.verycleaner.com/hwNannyPhone/insert", {
+        .post(that.API.serverApi+"/hwNannyPhone/insert", {
           cityName: that.address,
           phone: that.phone
 

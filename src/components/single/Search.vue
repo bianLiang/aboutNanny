@@ -172,7 +172,7 @@ export default {
       this.page = 0;
       this.datas = {jobTypeList:[], cityNameList:[], experience: null,age:null, education:null, isMarriage:null};
       axios
-        .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
+        .post(that.API.serverApi+"/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize,
           keyword: that.value? that.value: null,
@@ -219,7 +219,7 @@ export default {
       this.page = 0;
       this.datas = data;
       axios
-        .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
+        .post(that.API.serverApi+"/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize,
           keyword: that.value? that.value: null,
@@ -263,7 +263,7 @@ export default {
         that.page = 0;
       }
       axios
-        .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
+        .post(that.API.serverApi+"/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize,
           keyword: that.value? that.value: null,
@@ -434,6 +434,15 @@ export default {
 }
 .specialty-box {
   margin: 0 0.1rem;
+  margin: 0 0.1rem;
+  width: 4rem;
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 .specialty {
   font-size: 0.28rem;

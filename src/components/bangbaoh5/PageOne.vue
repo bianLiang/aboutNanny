@@ -83,14 +83,14 @@
           <span class="iconfont" @click="showAddressSelect">&#xe614;</span>
         </div>
         <div class="phone">
-          <input maxlength="11" :value="phone" class="i-input" type="text" placeholder="请输入你的手机号">
+          <input maxlength="11" v-model="phone" class="i-input" type="text" placeholder="请输入你的手机号">
         </div>
         <div class="verification-box">
-          <input maxlength="6" class="verification" :value="verification" type="text">
+          <input maxlength="6" class="verification" v-model="verification" type="text">
           <van-button  @click="onVerificationBtn" :disabled="verificationDisabled" class="verification-btn" type="default">{{verificationText}}</van-button>
         </div>
         <div class="matching-box">
-        <van-button class="matching-s" type="info" @click="onMatching">一键匹配阿姨</van-button>
+        <van-button class="matching-s" type="info" @click="send">一键匹配阿姨</van-button>
       </div>
       </div>
       <div v-if="isAreaList">
@@ -116,7 +116,7 @@ export default {
       isThreePage: false,
       isShowFrom: true,
       isAreaList: false,
-      address: '北京',
+      address: '',
       phone: null,
       verification: null,
       areaList: areaList,
@@ -168,12 +168,19 @@ export default {
           title:"收纳整理",
           isSelected: false
         },
-      ]
+      ],
+      selectServer:[]
     };
   },
   methods:{
     selectImg(index) {
       this.serverList[index].isSelected = !this.serverList[index].isSelected;
+      if (this.serverList[index].isSelected) {
+        this.selectServer.splice(index,0,this.serverList[index].title)
+      } else {
+        this.selectServer.splice(index, 1);
+      }
+
     },
     onMatching() {
       this.isOnePage = false;
@@ -209,6 +216,32 @@ export default {
           that.verificationText = '获取验证码';
         }
       },1000);
+      axios
+        .post(that.API.localApi_2 + "/hwNannyPhone/sendCode", {
+          phone: that.phone,
+        })
+        .then(function(response) {
+          console.log(response.data.data);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    send() {
+      const that = this;
+       axios
+        .post(that.API.localApi_2 + "/hwNannyPhone/user/register", {
+          phone: that.phone,
+          code: that.verification,
+          address: that.address,
+          selectServer: that.selectServer
+        })
+        .then(function(response) {
+          console.log(response.data.data);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
 }

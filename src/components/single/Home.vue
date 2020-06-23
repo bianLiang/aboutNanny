@@ -128,7 +128,7 @@ export default {
       that.page = 0;
       that.datas = data;
       axios
-        .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
+        .post(that.API.serverApi+"/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize,
           jobTypeList: that.datas.jobTypeList.length > 0? that.datas.jobTypeList: null,
@@ -170,7 +170,7 @@ export default {
         that.page = 0;
       }
       axios
-        .post("https://api.verycleaner.com/hwWorkerNanny/listAll", {
+        .post(that.API.serverApi + "/hwWorkerNanny/listAll", {
           pageNo: that.pageNo,
           pageSize: that.pageSize,
           jobTypeList: that.datas.jobTypeList.length > 0? that.datas.jobTypeList: null,
@@ -183,13 +183,6 @@ export default {
         })
         .then(function(response) {
           console.log(response.data.data);
-          // if (response.data.data.list.length>0) {
-          //   that.isScreen = true;
-          //   that.isEmpty = false;
-          // } else {
-          //   that.isScreen = false;
-          //   that.isEmpty = true;
-          // }
           that.loading = false;
           if (response.data.data.list.length) {
             that.processingData(response.data.data.list);
@@ -217,7 +210,7 @@ export default {
           workingYears: `从业${data[i].workWorkingYears? data[i].workWorkingYears : 0}年`,
           intention: `${data[i].isHome === 0 ? "不住家" : "住家"}|${
             data[i].workHopeJob? data[i].workHopeJob: '无'
-          }|${data[i].nativePlace? data[i].nativePlace : '无'}`,
+          }|${data[i].cityName? data[i].cityName : '无'}`,
           specialty: data[i].introduceOneselfTo? data[i].introduceOneselfTo: '',
           id: data[i].id
         });
@@ -300,7 +293,6 @@ export default {
 .specialty-box {
   margin: 0 0.1rem;
   width: 4rem;
-
  text-overflow: -o-ellipsis-lastline;
   overflow: hidden;
   text-overflow: ellipsis;

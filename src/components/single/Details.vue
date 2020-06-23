@@ -188,17 +188,17 @@
                   data.certificateDisplayList.length
                 }}</span
               >
-              <img :src="showCertificateDisplayUrl" alt="" />
+              <img :src="showCertificateDisplayUrl" alt=""/>
             </div>
           </v-touch>
         </van-popup>
       </div>
     </div>
     <div class="share-box">
-      <div class="icon-box" @click="showShare">
+      <!-- <div class="icon-box" @click="showShare">
         <span class="iconfont share-icon">&#xe623;</span>
         <span class="share-icon">分享</span>
-      </div>
+      </div> -->
       <div class="share" @click="showServiceModel">立即预约</div>
     </div>
     <ConsultingService ref="mymodel" ></ConsultingService>
@@ -259,9 +259,8 @@ export default {
   methods: {
     ajax(ID) {
       const that = this;
-      // https://api.verycleaner.com
       axios
-        .post("http://192.168.92.1:11112/hwWorkerNanny/findById", {
+        .post(that.API.serverApi+"/hwWorkerNanny/findById", {
           id: ID
         })
         .then(function(response) {

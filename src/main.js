@@ -8,6 +8,8 @@ import './assets/style/boder.css'
 import './assets/style/iconfont.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import api from './api/Global'
+Vue.prototype.API = api
 Vue.use(VueAxios, axios)
 import VueTouch from 'vue-touch'
 Vue.use(VueTouch, {name: 'v-touch'})
