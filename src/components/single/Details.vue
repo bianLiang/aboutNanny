@@ -158,14 +158,6 @@
         /><span>证件展示</span>
       </div>
       <div class="img-box">
-        <!-- <img
-          v-for="(item, key) in data.certificateDisplayList_1"
-          :key="item"
-          class="img"
-          :src="item"
-          alt=""
-          @click="showCertificateDisplay(item, key)"
-        /> -->
         <div @click="showCertificateDisplay(item, key)" v-for="(item, key) in data.certificateDisplayList_1" :key="key" class="img"  :style="{backgroundImage: 'url(' + (item) + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}"></div>
         <div
           class="mask"

@@ -10,10 +10,10 @@
             <span class="iconfont" @click="showAddressSelect">&#xe614;</span>
           </div>
           <div class="phone">
-            <input maxlength="11" :value="phone" class="i-input" type="text" placeholder="请输入你的手机号">
+            <input maxlength="11" v-model="phone" class="i-input" type="text" placeholder="请输入你的手机号">
           </div>
           <div class="verification-box">
-            <input maxlength="6" class="verification" :value="verification" type="text">
+            <input maxlength="6" class="verification" placeholder="请输入验证码" v-model="verification" type="text">
             <van-button  @click="onVerificationBtn" :disabled="verificationDisabled" class="verification-btn" type="default">{{verificationText}}</van-button>
           </div>
           <div class="address">
@@ -47,10 +47,10 @@
           <a href="#matching">立即匹配</a>
         </div>
       </div>
-      <div v-if="isAreaList">
+      <div v-if="isAreaList" class="area">
         <van-area title="选择地址" @cancel="cancel" @confirm="confirm" :area-list="areaList" :columns-num="2" />
       </div>
-      <div v-if="isPicker">
+      <div v-if="isPicker" class="area">
               <van-picker
           title="选择服务"
           show-toolbar
@@ -60,6 +60,7 @@
         />
       </div>
     </div>
+    <Verification ref="verification"></Verification>
   </div>
 </template>
 <script>
@@ -72,6 +73,9 @@ export default {
     [Area.name]: Area,
     [Picker.name]: Picker
   },
+  created () {
+    document.title = '帮宝家政';
+  },
   data() {
     return {
       address: '',
@@ -79,8 +83,8 @@ export default {
       isShowFrom: true,
       isAreaList: false,
       isPicker: false,
-      phone: null,
-      verification: null,
+      phone: "",
+      verification: "",
       areaList: areaList,
       verificationText: '获取验证码',
       verificationDisabled: false,
@@ -89,44 +93,73 @@ export default {
   },
   methods: {
     showAddressSelect() {
-      this.isShowFrom = false;
       this.isAreaList = true;
     },
     showServe() {
-      this.isShowFrom = false;
       this.isPicker = true;
     },
     onVerificationBtn() {
       const that = this;
-      this.verificationDisabled = true;
-      let index = 60;
-      const timer = setInterval(() => {
-        index--;
-        that.verificationText = index + 's'
-        if (index === 0) {
-          window.clearInterval(timer)
-          that.verificationDisabled = false;
-          that.verificationText = '获取验证码';
-        }
-      },1000);
+      if (that.$refs.verification.validateMobilePhone(that.phone)) {
+        this.verificationDisabled = true;
+        let index = 60;
+        const timer = setInterval(() => {
+          index--;
+          that.verificationText = index + "s";
+          if (index === 0) {
+            window.clearInterval(timer);
+            that.verificationDisabled = false;
+            that.verificationText = "获取验证码";
+          }
+        }, 1000);
+        axios
+          .post(that.API.serverApi + "/hwNannyPhone/sendCode", {
+            phone: that.phone
+          })
+          .then(function(response) {
+            if (response.data.code === 500) {
+              that.$refs.verification.notify('warning', response.data.msg)
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     },
-    onMatching (){},
+    onMatching (){
+      const that = this;
+      if (that.$refs.verification.nonempty(that.verification,'验证码不能为空')) {
+        axios
+        .post(that.API.serverApi + "/hwNannyPhone/user/register", {
+          phone: that.phone,
+          code: that.verification,
+          cityName: that.address,
+          selectServer: [that.server]
+        })
+        .then(function(response) {
+          if (response.data.code === 500) {
+            that.$refs.verification.notify('warning', response.data.msg)
+          } else if (response.data.code === 200) {
+            that.$refs.verification.notify('success', '提交成功，我们会及时联系您');
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      }
+    },
     cancel() {
       this.isAreaList = false;
-      this.isShowFrom = true;
     },
     confirm(e) {
       this.isAreaList = false;
-      this.isShowFrom = true;
       this.address = e[0].name + e[1].name;
     },
     onConfirm(value, index) {
-      this.isShowFrom = true;
       this.isPicker = false;
       this.server = value;
     },
     onCancel() {
-      this.isShowFrom = true;
       this.isPicker = false;
     },
   }
@@ -152,7 +185,7 @@ export default {
 .address span{
   font-size: 0.32rem;
   top: 0.45rem;
-  right: 0.5rem;
+  right: 0.2rem;
   position: absolute;
 }
 .i-input {
@@ -176,13 +209,14 @@ export default {
   height: 0.88rem;
   width: 60%;
   padding-left: 0.2rem;
+  font-size: 0.32rem;
 }
 .verification-btn {
   border-radius:0.08rem;
   border:0.02rem solid rgba(213,213,213,1);
   height: 0.88rem;
   color: #999999;
-  width: 2rem;
+  width: 2.2rem;
 }
  .matching-box{
     text-align: center;
@@ -215,5 +249,11 @@ export default {
     line-height: 0.5rem;
     text-align: center;
     border-radius: 0.5rem;
+  }
+  .area {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    -moz-box-shadow:0px -1px 6px #A6A6A6; -webkit-box-shadow:0px -1px 6px #A6A6A6; box-shadow:0px -1px 6px #A6A6A6;
   }
 </style>

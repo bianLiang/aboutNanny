@@ -13,6 +13,8 @@ Vue.prototype.API = api
 Vue.use(VueAxios, axios)
 import VueTouch from 'vue-touch'
 Vue.use(VueTouch, {name: 'v-touch'})
+import Verification from './public/Verification'
+Vue.component('Verification', Verification)
 
 Vue.config.productionTip = false
 
