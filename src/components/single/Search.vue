@@ -228,7 +228,7 @@ export default {
           experience: that.datas.experience? that.datas.experience: null,
           age: that.datas.age? that.datas.age: null,
           education: that.datas.education? that.datas.education: null,
-          isMarriage: that.datas.marriage? that.datas.marriage: null,
+          isMarriage: that.datas.isMarriage? that.datas.isMarriage: null,
         })
         .then(function(response) {
           if (response.data.data.list.length>0) {

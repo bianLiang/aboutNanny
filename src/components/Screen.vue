@@ -138,15 +138,14 @@ export default {
         ],
         marriageList: [
           {name:"已婚", active: false},
-          {name:"未婚", active: false},
-          {name:"离异", active: false}
+          {name:"未婚", active: false}
         ]
       },
       screenSelectIndex: 0,
       experience: '',
       age: '',
       education: '',
-      marriage: '',
+      marriage: 0,
       nativePlaceList: [
         { name: "北京", active: false },
         { name: "四川", active: false },
@@ -244,10 +243,9 @@ export default {
     },
     clickMarriageBtn(index) {
       this.clearSelection(this.screen.marriageList, index);
-      if (this.marriage === '') {
+      if (this.marriage === 0) {
         this.screenSelectIndex++
       }
-      // this.marriage = this.screen.marriageList[index].name;
       this.marriage = index + 1;
 
     },
@@ -265,7 +263,7 @@ export default {
       this.experience = '';
       this.age = '';
       this.education = '';
-      this.marriage = '';
+      this.marriage = 0;
       for (let i = 0; i < this.screen.experienceList.length; i++) {
         this.screen.experienceList[i].active = false;
       };

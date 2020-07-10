@@ -15,41 +15,41 @@
       </p>
       <div class="bianzu-box">
         <div class="bianzu-item">
-          <img src="../../assets/img/编组.png" alt="" />
+          <img src="../../assets/img/bianzu.png" alt="" />
           <span>60+</span>
           <span>城市覆盖</span>
         </div>
         <div class="bianzu-item">
-          <img src="../../assets/img/编组 2.png" alt="" />
+          <img src="../../assets/img/bianzu_2.png" alt="" />
           <span>8000+</span>
           <span>线下门店</span>
         </div>
         <div class="bianzu-item">
-          <img src="../../assets/img/编组 3.png" alt="" />
+          <img src="../../assets/img/bianzu_3.png" alt="" />
           <span>1对1</span>
           <span>家政顾问</span>
         </div>
         <div class="bianzu-item">
-          <img src="../../assets/img/编组 4.png" alt="" />
+          <img src="../../assets/img/bianzu_4.png" alt="" />
           <span>8万+</span>
           <span>优质阿姨</span>
         </div>
       </div>
       <div>
         <div class="pipei">
-          <img src="../../assets/img/第一.png" alt="" />
+          <img src="../../assets/img/diyi_1.png" alt="" />
           <span>所有阿姨身份可查，健康有保证</span>
         </div>
         <div class="pipei">
-          <img src="../../assets/img/第一备份.png" alt="" />
+          <img src="../../assets/img/diyi_2.png" alt="" />
           <span>所有阿姨身份可查，健康有保证</span>
         </div>
         <div class="pipei">
-          <img src="../../assets/img/第一备份 2.png" alt="" />
+          <img src="../../assets/img/diyi_3.png" alt="" />
           <span>所有阿姨身份可查，健康有保证</span>
         </div>
         <div class="pipei">
-          <img src="../../assets/img/第一备份 3.png" alt="" />
+          <img src="../../assets/img/diyi_4.png" alt="" />
           <span>所有阿姨身份可查，健康有保证</span>
         </div>
       </div>
@@ -77,7 +77,7 @@
             "
             alt=""
           />
-          <img class="zhutu" :src="item.url" alt="" />
+          <img class="zhutu" v-bind:src="item.url" alt="" />
           <div class="title">{{ item.title }}</div>
         </div>
       </div>
@@ -180,47 +180,47 @@ export default {
       verificationDisabled: false,
       serverList: [
         {
-          url: require("../../assets/img/位图.png"),
+          url: require("../../assets/img/weitu_1.png"),
           title: "做饭",
           isSelected: false
         },
         {
-          url: require("../../assets/img/位图备份.png"),
+          url: require("../../assets/img/weitu_2.png"),
           title: "做家务",
           isSelected: false
         },
         {
-          url: require("../../assets/img/位图备份 2.png"),
+          url: require("../../assets/img/weitu_3.png"),
           title: "日常保洁",
           isSelected: false
         },
         {
-          url: require("../../assets/img/位图备份 3.png"),
+          url: require("../../assets/img/weitu_4.png"),
           title: "照顾老人",
           isSelected: false
         },
         {
-          url: require("../../assets/img/位图备份 4.png"),
+          url: require("../../assets/img/weitu_5.png"),
           title: "照顾小孩",
           isSelected: false
         },
         {
-          url: require("../../assets/img/位图备份 5.png"),
+          url: require("../../assets/img/weitu_6.png"),
           title: "照顾孕妇",
           isSelected: false
         },
         {
-          url: require("../../assets/img/位图 6.png"),
+          url: require("../../assets/img/weitu_7.png"),
           title: "洗衣洗鞋",
           isSelected: false
         },
         {
-          url: require("../../assets/img/位图备份 7.png"),
+          url: require("../../assets/img/weitu_8.png"),
           title: "照顾病人",
           isSelected: false
         },
         {
-          url: require("../../assets/img/位图备份 8.png"),
+          url: require("../../assets/img/weitu_9.png"),
           title: "收纳整理",
           isSelected: false
         }

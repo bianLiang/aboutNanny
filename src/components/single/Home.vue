@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="search-box">
+    <!-- <img @click="editResume" style="width: 100%;" src="../../assets/img/shangchuan.png" alt=""> -->
       <van-search
         readonly="true"
         background="#fff"
@@ -136,7 +137,7 @@ export default {
           experience: that.datas.experience? that.datas.experience: null,
           age: that.datas.age? that.datas.age: null,
           education: that.datas.education? that.datas.education: null,
-          isMarriage: that.datas.marriage? that.datas.marriage: null,
+          isMarriage: that.datas.isMarriage? that.datas.isMarriage: null,
         })
         .then(function(response) {
           console.log(response.data.data);
@@ -210,11 +211,16 @@ export default {
           workingYears: `从业${data[i].workWorkingYears? data[i].workWorkingYears : 0}年`,
           intention: `${data[i].isHome === 0 ? "不住家" : "住家"}|${
             data[i].workHopeJob? data[i].workHopeJob: '无'
-          }|${data[i].cityName? data[i].cityName : '无'}`,
+          }|${data[i].nativePlace? data[i].nativePlace : '无'}`,
           specialty: data[i].introduceOneselfTo? data[i].introduceOneselfTo: '',
           id: data[i].id
         });
       }
+    },
+    editResume() {
+      this.$router.push({
+        name: "EditResume",
+      });
     },
     onClickList(id) {
       console.log(id);

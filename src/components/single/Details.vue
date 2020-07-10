@@ -50,7 +50,7 @@
       <div class="introduce">
         <img
           style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
-          src="../../assets/img/个人 (2).png"
+          src="../../assets/img/geren.png"
           alt=""
         /><span>自我介绍</span>
       </div>
@@ -65,7 +65,7 @@
       <div class="intention">
         <img
           style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
-          src="../../assets/img/定位.png"
+          src="../../assets/img/dingwei.png"
           alt=""
         /><span>求职意向</span>
       </div>
@@ -90,7 +90,7 @@
       <div class="experience">
         <img
           style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
-          src="../../assets/img/劳动技能.png"
+          src="../../assets/img/laodongjineng.png"
           alt=""
         /><span>从业经历</span>
       </div>
@@ -107,7 +107,7 @@
       <div class="personal-display">
         <img
           style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
-          src="../../assets/img/照片.png"
+          src="../../assets/img/zhaopian.png"
           alt=""
         /><span>个人展示</span>
       </div>
@@ -153,7 +153,7 @@
       <div class="certificate-display">
         <img
           style="width: 0.44rem;height: 0.44rem;margin-right: 0.05rem;"
-          src="../../assets/img/电子证件.png"
+          src="../../assets/img/dianzizhengjian.png"
           alt=""
         /><span>证件展示</span>
       </div>

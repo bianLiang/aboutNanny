@@ -25,6 +25,8 @@ export default {
         this.$refs.myTitle.changeTitle("帮宝家政阿姨简历库");
       } else if (this.$route.path === "/Search") {
         this.$refs.myTitle.changeTitle("搜索");
+      } else if (this.$route.path === "/EditResume") {
+        this.$refs.myTitle.changeTitle("制作简历");
       }
     }
   },
