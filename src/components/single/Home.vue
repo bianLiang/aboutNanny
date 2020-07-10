@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-box">
-    <!-- <img @click="editResume" style="width: 100%;" src="../../assets/img/shangchuan.png" alt=""> -->
+    <img @click="editResume" style="width: 100%;" src="../../assets/img/shangchuan.png" alt="">
       <van-search
         readonly="true"
         background="#fff"
