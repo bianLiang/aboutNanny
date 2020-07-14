@@ -268,7 +268,7 @@ export default {
   background: #fff;
 }
 .content-max-box {
-  margin-top: 3.2rem;
+  margin-top: 5.2rem;
 }
 .li-box {
   display: flex;

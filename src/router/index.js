@@ -4,7 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Home from '../components/single/Home'
 import Details from '../components/single/Details'
 import Search from '../components/single/Search'
-import EditResume from '../components/EditResume'
+import EditResume from '../components/single/EditResume'
 import PageOne from '../components/bangbaoh5/PageOne'
 import PageTwo from '../components/bangbaoh5/PageTwo'
 

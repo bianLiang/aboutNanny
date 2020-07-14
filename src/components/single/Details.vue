@@ -127,7 +127,7 @@
           @click="showPersonalDisplay(data.personalDisplayList_1[8], 8)"
           v-if="data.personalDisplayList.length > 9"
         ></div>
-        <span class="push" v-if="data.personalDisplayList.length > 9"
+        <span  @click="showPersonalDisplay(data.personalDisplayList_1[8], 8)" class="push" v-if="data.personalDisplayList.length > 9"
           >+{{ data.personalDisplayList.length }}</span
         >
 
@@ -336,8 +336,6 @@ export default {
         this.showPersonalDisplayUrl = this.data.personalDisplayList[
           this.currentPages - 1
         ];
-
-        console(this.currentPages);
       }
     },
     onSwipeRight() {
@@ -346,7 +344,6 @@ export default {
         this.showPersonalDisplayUrl = this.data.personalDisplayList[
           this.currentPages - 1
         ];
-        console(this.currentPages);
       }
     },
     onSwipeLeft_1() {
