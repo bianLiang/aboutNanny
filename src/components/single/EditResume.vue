@@ -3,7 +3,7 @@
     <div class="teacher-max-box">
       <div class="teacher-box">
         <span class="teacher">家政老师</span>
-        <span class="push">{{company? teacherTitle='去修改' : teacherTitle='去添加'}}<span class="iconfont">&#xe614;</span></span>
+        <span class="push" @click="onTeacher">{{company? teacherTitle='去修改' : teacherTitle='去添加'}}<span class="iconfont">&#xe614;</span></span>
       </div>
       <div v-if="company? true: false">
         <p class="paragraph">家政公司：{{company}}</p>
@@ -12,13 +12,22 @@
     </div>
     <div class="head-url-box">
       <div class="head-box">
-        <div class="seize" :style="{backgroundImage: 'url(' + (headPortraitUrl ? headPortraitUrl : '../../assets/img/zhanwei.png') + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}"></div>
+        <div class="seize" :style="{backgroundImage: 'url(' + (headPortraitUrl ? headPortraitUrl : require('../../assets/img/touxiang.png')) + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}"></div>
         <div class="head-content">
-          <p>{{name?name:'姓名'}}<span>{{name? nameTitle='去修改' : nameTitle='去添加'}}<span class="iconfont">&#xe614;</span></span></p>
+          <p>{{name?name:'姓名'}}<span @click="onBasicInformation">{{name? nameTitle='去修改' : nameTitle='去添加'}}<span class="iconfont">&#xe614;</span></span></p>
           <p><span style="width:2.5rem;display: inline-block;">学历：{{education?education: '无'}}</span><span>属相：{{genitals? genitals:'无'}}</span></p>
           <p><span style="width:2.5rem;display: inline-block;">民族：{{nation? nation: '无'}}</span><span>星座：{{constellation?constellation:'无'}}</span></p>
           <p><span>年龄 {{age?age: 0}}岁</span>&nbsp;&nbsp;&nbsp;<span>{{native? native:'无人'}}</span>&nbsp;&nbsp;&nbsp;<span>工作 {{experiences?experiences: 0}}年</span></p>
         </div>
+      </div>
+    </div>
+    <div class="specialty-max-box">
+      <div class="teacher-box">
+        <span class="teacher">特长优点</span>
+        <span class="push">{{specialtyList.length>0? specialtyTitle='去修改' : specialtyTitle='去添加'}}<span class="iconfont">&#xe614;</span></span>
+      </div>
+      <div class="specialty-box" v-if="specialtyList.length>0">
+        <div class="specialty-item" v-for="(item,index) in specialtyList" :key="index">{{item}}</div>
       </div>
     </div>
     <div class="teacher-max-box">
@@ -111,6 +120,9 @@ export default {
   components: {
     [Popup.name]: Popup
   },
+  created () {
+    this.setData(this.$route.query.setData);
+  },
   data() {
     return {
       teacherTitle:'去添加',
@@ -118,10 +130,11 @@ export default {
       jobTypeTitle: '去添加',
       experiencesTitle: '去添加',
       introduceTitle:'去添加',
+      specialtyTitle:'去添加',
       introduceContent:'这是一段很长的自我介绍，这是一段很长的自我介绍，这是一段很长的自我介绍。',
-      company:'帮宝家政',
-      phone:'18918292901',
-      headPortraitUrl:require("../../assets/img/zhanwei.png"),
+      company:'',
+      phone:'',
+      headPortraitUrl:'',
       name:'李华',
       education:'高中',
       genitals:'狗',
@@ -175,9 +188,45 @@ export default {
       showPersonalDisplayUrl: '',
       currentPages: 0,
       isShowPersonalDisplay: false,
+      specialtyList:[]
     }
   },
   methods: {
+    onTeacher() {
+      this.$router.push({
+        name: "Teacher",
+        query: {
+          company: this.company,
+          phone:this.phone
+        }
+      });
+    },
+    onBasicInformation () {
+      this.$router.push({
+        name: "BasicInformation",
+        query: {
+          headPortraitUrl: this.headPortraitUrl,
+          name: this.name,
+          education:this.education,
+          genitals:this.genitals,
+          nation:this.nation,
+          constellation:this.constellation,
+          age:this.age,
+          native: this.native,
+          experiences:this.experiences
+        }
+      });
+    },
+    // 处理保存上来的数据
+    setData (data) {
+      for(let key in data) {
+        if (key === 'company') {
+          this.company = data[key];
+        } else if (key === 'phone') {
+          this.phone = data[key];
+        }
+      }
+    },
      // 截取10条图片
     processingImgList(data) {
       if (data.length > 9) {
@@ -414,5 +463,25 @@ export default {
   line-height: 0.8rem;
   text-align: center;
   margin: 0 0.2rem;
+}
+.specialty-max-box {
+  background: #fff;
+  padding: 0.2rem;
+  margin-top: 0.2rem;
+}
+.specialty-box {
+  display: flex;
+  flex-wrap:wrap;
+}
+.specialty-item {
+  font-size: 0.2rem;
+  color: #3395FF;
+  width: 1.5rem;
+  margin: 0.1rem 0.1rem;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  border: 0.02rem solid #3395FF;
+  border-radius: 0.1rem;
+  text-align: center;
 }
 </style>

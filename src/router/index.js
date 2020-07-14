@@ -5,6 +5,8 @@ import Home from '../components/single/Home'
 import Details from '../components/single/Details'
 import Search from '../components/single/Search'
 import EditResume from '../components/single/EditResume'
+import Teacher from '../components/single/Teacher'
+import BasicInformation from '../components/single/BasicInformation'
 import PageOne from '../components/bangbaoh5/PageOne'
 import PageTwo from '../components/bangbaoh5/PageTwo'
 
@@ -39,6 +41,16 @@ export default new Router({
       path:'/EditResume',
       name:'EditResume',
       component:EditResume,
+    },
+    {
+      path:'/Teacher',
+      name:'Teacher',
+      component:Teacher,
+    },
+    {
+      path:'/BasicInformation',
+      name:'BasicInformation',
+      component:BasicInformation,
     },
     {
       path: '/PageOne',

@@ -34,6 +34,10 @@ export default {
       this.title = '搜索';
     } else if (this.$route.path === '/EditResume') {
       this.title = '制作简历';
+    } else if (this.$route.path === "/Teacher") {
+        this.title ="家政老师"
+    } else if (this.$route.path === "/BasicInformation") {
+        this.title ='基本信息'
     }
     if (this.$route.path === "/PageOne" || this.$route.path === "/PageTwo") {
       this.isTitle = false;

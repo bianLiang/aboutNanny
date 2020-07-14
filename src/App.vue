@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <Title ref="myTitle" />
-      <!-- <router-view /> -->
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
@@ -27,6 +26,10 @@ export default {
         this.$refs.myTitle.changeTitle("搜索");
       } else if (this.$route.path === "/EditResume") {
         this.$refs.myTitle.changeTitle("制作简历");
+      } else if (this.$route.path === "/Teacher") {
+        this.$refs.myTitle.changeTitle("家政老师");
+      } else if (this.$route.path === "/BasicInformation") {
+        this.$refs.myTitle.changeTitle("基本信息");
       }
     }
   },
