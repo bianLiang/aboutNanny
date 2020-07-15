@@ -148,6 +148,9 @@ export default {
       jobSearchCategory: '做饭做家务',
       salaryExpectation: '5000-6000',
       currentAddress: '朝阳欢乐谷',
+      idCard:'342623199412018513',
+      gender:'男',
+      marriage: 0,
       experiencesList:[
         {type:'保姆',experiencetime:'2017.05 ～ 2019.08',experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
         {type:'月嫂',experiencetime:'2017.05 ～ 2019.08',experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
@@ -213,7 +216,11 @@ export default {
           constellation:this.constellation,
           age:this.age,
           native: this.native,
-          experiences:this.experiences
+          experiences:this.experiences,
+          phone: this.phone,
+          idCard: this.idCard,
+          gender: this.gender,
+          marriage:this.marriage
         }
       });
     },
