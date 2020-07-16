@@ -1,66 +1,460 @@
 <template>
   <div>
-    <!-- 省份证上传 -->
-    <van-popup v-model="showIdCard" position="bottom" :style="{ height: '80%' }" >
+    <!-- 身份证上传 -->
+    <van-popup
+      v-model="showIdCard"
+      position="bottom"
+      :style="{ height: '80%' }"
+    >
       <div class="box">
         <div class="id-card-max-box">
           <p class="title" style="margin-bottom:0.2rem">身份证照片</p>
           <div class="id-card-box">
             <div style="position: relative;">
-              <div class="id-card-item">
-                <img style="width: 0.6rem;" src="../assets/img/camera.png" alt="">
-                <p style="color:#000;font-size:0.28rem;">点击拍摄/上传人像面</p>
-              </div>
-              <div style="position: absolute;top: 0;left: 0.09rem;">
-                <div class="seize" :style="{backgroundImage: 'url(' + positiveUrl + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}"></div>
-                <img style="position: absolute;right: -0.4rem;top: -0.4rem;" src="../assets/img/close.png" alt="">
+              <van-uploader :after-read="uploaderPositive">
+                <div class="id-card-item">
+                  <img
+                    style="width: 0.6rem;"
+                    src="../assets/img/camera.png"
+                    alt=""
+                  />
+                  <p style="color:#000;font-size:0.28rem;">
+                    点击拍摄/上传人像面
+                  </p>
+                </div>
+              </van-uploader>
+              <div
+                v-if="positiveUrl ? true : false"
+                style="position: absolute;top: 0;left: 0.2rem;"
+              >
+                <div
+                  class="seize"
+                  :style="{
+                    backgroundImage: 'url(' + positiveUrl + ')',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat'
+                  }"
+                ></div>
+                <img
+                  @click="closePositive"
+                  style="position: absolute;right: -0.3rem;top: -0.3rem;width: 0.5rem;"
+                  src="../assets/img/close.png"
+                  alt=""
+                />
               </div>
             </div>
             <div style="position: relative;">
-              <div class="id-card-item">
-                <img style="width: 0.6rem;" src="../assets/img/camera.png" alt="">
-                <p style="color:#000;font-size:0.28rem;">点击拍摄/上传国徽面</p>
-              </div>
-              <div style="position: absolute;top: 0;left: 0.09rem;">
-                <div class="seize" :style="{backgroundImage: 'url(' + positiveUrl + ')',backgroundPosition:'center',backgroundSize: 'cover',backgroundRepeat:'no-repeat'}"></div>
-                <img style="position: absolute;right: -0.4rem;top: -0.4rem;" src="../assets/img/close.png" alt="">
+              <van-uploader :after-read="uploaderBack">
+                <div class="id-card-item">
+                  <img
+                    style="width: 0.6rem;"
+                    src="../assets/img/camera.png"
+                    alt=""
+                  />
+                  <p style="color:#000;font-size:0.28rem;">
+                    点击拍摄/上传国徽面
+                  </p>
+                </div>
+              </van-uploader>
+              <div
+                v-if="backUrl ? true : false"
+                style="position: absolute;top: 0;left: 0.2rem;"
+              >
+                <div
+                  class="seize"
+                  :style="{
+                    backgroundImage: 'url(' + backUrl + ')',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat'
+                  }"
+                ></div>
+                <img
+                  @click="closeBack"
+                  style="position: absolute;right: -0.3rem;top: -0.3rem;width: 0.5rem;"
+                  src="../assets/img/close.png"
+                  alt=""
+                />
               </div>
             </div>
           </div>
+          <p v-if="isPhotoError" style="color:red;font-size:0.2rem;">{{photoErrorMsg}}</p>
+        </div>
+        <div style='margin: 0.2rem 0;'>
+          <van-form @submit="onSubmit">
+            <van-field
+              v-model="idCard"
+              name="idCard"
+              label="身份证号"
+              placeholder="身份证号"
+              size='large'
+              input-align='right'
+              :rules="[{ required: true, message: '请填写身份证号' }]"
+            />
+            <van-field
+              v-model="name"
+              name="name"
+              label="姓名"
+              placeholder="姓名"
+              size='large'
+              input-align='right'
+              :rules="[{ required: true, message: '请正确填写姓名' }]"
+            />
+            <van-field
+              v-model="gender"
+              name="gender"
+              label="性别"
+              placeholder="性别"
+              size='large'
+              input-align='right'
+              :rules="[{ required: true, message: '请正确填写性别' }]"
+            />
+            <van-field
+              v-model="age"
+              name="age"
+              label="年龄"
+              placeholder="年龄"
+              size='large'
+              input-align='right'
+              :rules="[{ required: true, message: '请正确填写年龄' }]"
+            />
+            <div class="submit-box">
+              <van-button round block type="info" native-type="submit">
+                保存
+              </van-button>
+            </div>
+          </van-form>
         </div>
       </div>
+    </van-popup>
+    <!-- 籍贯 -->
+    <van-popup v-model="showNative" position="bottom">
+      <van-picker
+        show-toolbar
+        title="籍贯"
+        :default-index= indexNative
+        :columns="columnsNative"
+        @confirm="onConfirmNative"
+        @cancel="showNative = false"
+      />
+    </van-popup>
+    <!-- 学历 -->
+    <van-popup v-model="showEducation" position="bottom">
+      <van-picker
+        show-toolbar
+        title="学历"
+        :default-index= indexEducation
+        :columns="columnsEducation"
+        @confirm="onConfirmEducation"
+        @cancel="showEducation = false"
+      />
+    </van-popup>
+    <!-- 民族 -->
+    <van-popup v-model="showNation" position="bottom">
+      <van-picker
+        show-toolbar
+        title="民族"
+        :default-index= indexNation
+        :columns="columnsNation"
+        @confirm="onConfirmNation"
+        @cancel="showNation = false"
+      />
+    </van-popup>
+    <!-- 婚姻状况 -->
+    <van-popup v-model="showMarriage" position="bottom">
+      <van-picker
+        show-toolbar
+        title="婚姻状况"
+        :default-index= indexMarriage
+        :columns="columnsMarriage"
+        @confirm="onConfirmMarriage"
+        @cancel="showMarriage = false"
+      />
+    </van-popup>
+    <!-- 从业经验 -->
+    <van-popup v-model="showExperiences" position="bottom">
+      <van-picker
+        show-toolbar
+        title="从业经验"
+        :default-index= indexExperiencese
+        :columns="columnsExperiences"
+        @confirm="onConfirmExperiences"
+        @cancel="showExperiences = false"
+      />
     </van-popup>
   </div>
 </template>
 <script>
-import { Popup } from 'vant';
+import areaList from '../api/area.js'
+import { Popup, Uploader,Button,Form,Field,Picker  } from "vant";
 export default {
-  name:'Popup',
-   components: {
-    [Popup.name]: Popup
+  name: "Popup",
+  components: {
+    [Popup.name]: Popup,
+    [Uploader.name]: Uploader,
+    [Button.name]: Button,
+    [Form.name]: Form,
+    [Field.name]: Field,
+    [Picker.name]: Picker,
   },
   data() {
     return {
-      showIdCard:true,
-      positiveUrl: require('../assets/img/tupian1.jpg')
-    }
+      showIdCard: false,
+      isPhotoError: false,
+      photoErrorMsg:'',
+      positiveUrl: '',
+      backUrl: '',
+      idCard: "",
+      name: "",
+      gender: "",
+      age: "",
+      columnsNative: [
+        '北京市',
+        '天津市',
+        '河北省',
+        '山西省',
+        '内蒙古自治区',
+        '辽宁省',
+        '吉林省',
+        '黑龙江省',
+        '上海市',
+        '江苏省',
+        '浙江省',
+        '安徽省',
+        '福建省',
+        '江西省',
+        '山东省',
+        '河南省',
+        '湖北省',
+        '湖南省',
+        '广东省',
+        '广西壮族自治区',
+        '海南省',
+        '重庆市',
+        '四川省',
+        '贵州省',
+        '云南省',
+        '西藏自治区',
+        '陕西省',
+        '甘肃省',
+        '青海省',
+        '宁夏回族自治区',
+        '新疆维吾尔自治区',
+        '台湾省',
+        '香港特别行政区',
+        '澳门特别行政区',
+        '海外'
+      ],
+      indexNative:0,
+      showNative:false,
+      indexEducation:0,
+      showEducation:false,
+      columnsEducation:[
+        '小学',
+        '初中',
+        '高中',
+        '大专',
+        '本科',
+        '研究生'
+      ],
+      indexMarriage:0,
+      showMarriage:false,
+      columnsMarriage:[
+        '已婚',
+        '未婚'
+      ],
+      indexExperiencese:0,
+      showExperiences:false,
+      columnsExperiences:[
+        '0年',
+        '1年',
+        '2年',
+        '3年',
+        '4年',
+        '5年',
+        '6年',
+        '7年',
+        '8年',
+        '9年',
+        '10年',
+        '11年',
+        '12年',
+        '13年',
+        '14年',
+        '15年',
+        '16年',
+        '17年',
+        '18年',
+        '19年',
+        '20年'
+      ],
+      indexNation :0,
+      showNation :false,
+      columnsNation :[
+        '汉族',
+        '蒙古族',
+        '回族',
+        '藏族',
+        '维吾尔族',
+        '苗族',
+        '彝族',
+        '壮族',
+        '布依族',
+        '朝鲜族',
+        '满族',
+        '侗族',
+        '瑶族',
+        '白族',
+        '土家族',
+        '哈尼族',
+        '哈萨克族',
+        '傣族',
+        '黎族',
+        '傈僳族',
+        '佤族',
+        '畲族',
+        '高山族',
+        '拉祜族',
+        '水族',
+        '东乡族',
+        '纳西族',
+        '景颇族',
+        '柯尔克孜族',
+        '土族',
+        '达翰尔族',
+        '么佬族',
+        '羌族',
+        '布朗族',
+        '撒拉族',
+        '毛南族',
+        '仡佬族',
+        '锡伯族',
+        '阿昌族',
+        '普米族',
+        '塔吉克族',
+        '怒族',
+        '乌孜别克族',
+        '俄罗斯族',
+        '鄂温克族',
+        '德昂族',
+        '保安族',
+        '裕固族',
+        '京族',
+        '塔塔尔族',
+        '独龙族',
+        '鄂伦春族',
+        '赫哲族',
+        '门巴族',
+        '珞巴族',
+        '基诺族'
+      ],
+
+    };
   },
   methods: {
     show(type, options) {
-      if (type === 'showIdCard') {
+      if (type === "showIdCard") {
+        this.positiveUrl = options.positiveUrl;
+        this.backUrl = options.backUrl;
+        this.idCard = options.idCard;
+        this.name = options.name;
+        this.gender = options.gender;
+        this.age = options.age;
         this.showIdCard = true;
-        console.log(options);
+      } else if (type === 'showNative') {
+        this.indexNative = options.value;
+        this.showNative = true;
+      } else if (type === 'showEducation') {
+        this.indexEducation = options.value;
+        this.showEducation = true;
+      } else if (type === 'showNation') {
+         this.indexNation = options.value;
+        this.showNation = true;
+      } else if (type === 'showMarriage') {
+        this.indexMarriage = options.value;
+        this.showMarriage = true;
+      } else if (type === 'showExperiences') {
+        this.indexExperiences = options.value;
+        this.showExperiences = true;
       }
-    }
+    },
+    uploaderPositive(file) {
+      this.positiveUrl = file.content;
+      if (this.backUrl === '') {
+        this.photoErrorMsg = '请上传身份证背面照片';
+      } else {
+        this.isPhotoError = false;
+      }
+    },
+    uploaderBack(file) {
+      this.backUrl = file.content;
+       if (this.positiveUrl === '') {
+        this.photoErrorMsg = '请上传身份证正面照片';
+      } else {
+        this.isPhotoError = false;
+      }
+    },
+    closePositive() {
+      this.positiveUrl = "";
+    },
+    closeBack() {
+      this.backUrl = "";
+    },
+    onSubmit(values) {
+      if (this.backUrl === '') {
+        this.photoErrorMsg = '请上传身份证背面照片';
+        this.isPhotoError = true;
+      } else if(this.positiveUrl === '') {
+        this.photoErrorMsg = '请上传身份证正面照片';
+        this.isPhotoError = true;
+      } else {
+        const data = {
+          positiveUrl: this.positiveUrl,
+          backUrl: this.backUrl,
+          idCard: this.idCard,
+          name: this.name,
+          gender: this.gender,
+          age: this.age
+        };
+        this.$emit('getData',data)
+        this.showIdCard = false;
+      }
+
+    },
+    onConfirmNative(value) {
+      const data = {native:value};
+      this.$emit('getData',data)
+      this.showNative = false;
+    },
+    onConfirmEducation(value) {
+      const data = {education:value};
+      this.$emit('getData',data)
+      this.showEducation = false;
+    },
+    onConfirmNation(value) {
+      const data = {nation:value};
+      this.$emit('getData',data)
+      this.showNation = false;
+    },
+    onConfirmMarriage(value) {
+      const data = {marriage:value==='已婚'? 0:1};
+      this.$emit('getData',data)
+      this.showMarriage = false;
+    },
+    onConfirmExperiences(value) {
+      const data = {experiences:parseInt(value)};
+      this.$emit('getData',data)
+      this.showExperiences = false;
+    },
   }
-}
+};
 </script>
 <style scoped>
 .box {
   height: 100%;
   width: 100%;
   background: #eee;
-
 }
 .title {
   font-size: 0.36rem;
@@ -91,5 +485,17 @@ export default {
   width: 3.3rem;
   height: 2rem;
   border-radius: 0.1rem;
+}
+.submit-box {
+  margin: 16px;
+  background: #fff;
+  position: fixed;
+  bottom: -0.3rem;
+  width: 100%;
+  height: 1.5rem;
+  left: -0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

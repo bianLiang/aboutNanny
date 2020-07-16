@@ -141,7 +141,7 @@ export default {
       constellation:'射手',
       nation:'汉',
       age:35,
-      native:'安徽',
+      native:'安徽省',
       experiences: 5,
       jobType:'保姆',
       isHome: '是',

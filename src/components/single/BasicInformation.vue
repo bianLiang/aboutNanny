@@ -17,40 +17,40 @@
     </div>
     <div class="name-box">
       <span class="title">姓名</span>
-      <span class="content">{{name}}<span class="iconfont" style="margin-left: 0.2rem;">&#xe614;</span></span>
+      <span class="content">{{name}}<span class="iconfont" style="margin-left: 0.2rem;" @click="showidCardModel">&#xe614;</span></span>
     </div>
     <div class="gender-box">
       <span class="title">性别</span>
-      <span class="content">{{gender}}<span class="iconfont" style="margin-left: 0.2rem;">&#xe614;</span></span>
+      <span class="content">{{gender}}<span class="iconfont" style="margin-left: 0.2rem;" @click="showidCardModel">&#xe614;</span></span>
     </div>
     <div class="age-box">
       <span class="title">年龄</span>
-      <span class="content">{{age}}<span class="iconfont" style="margin-left: 0.2rem;">&#xe614;</span></span>
+      <span class="content">{{age}}<span class="iconfont" style="margin-left: 0.2rem;" @click="showidCardModel">&#xe614;</span></span>
     </div>
     <div class="native-box">
       <span class="title">籍贯</span>
-      <span class="content">{{native}}<span class="iconfont" style="margin-left: 0.2rem;">&#xe614;</span></span>
+      <span class="content">{{native}}<span class="iconfont" style="margin-left: 0.2rem;" @click="showNativeModel">&#xe614;</span></span>
     </div>
     <div class="education-box">
       <span class="title">学历</span>
-      <span class="content">{{education}}<span class="iconfont" style="margin-left: 0.2rem;">&#xe614;</span></span>
+      <span class="content">{{education}}<span class="iconfont" style="margin-left: 0.2rem;" @click="showEducationModel">&#xe614;</span></span>
     </div>
     <div class="nation-box">
       <span class="title">民族</span>
-      <span class="content">{{nation}}<span class="iconfont" style="margin-left: 0.2rem;">&#xe614;</span></span>
+      <span class="content">{{nation}}<span class="iconfont" style="margin-left: 0.2rem;" @click="showNationModel">&#xe614;</span></span>
     </div>
     <div class="marriage-box">
       <span class="title">婚姻状态</span>
-      <span class="content">{{marriage ===0? '已婚':'未婚'}}<span class="iconfont" style="margin-left: 0.2rem;">&#xe614;</span></span>
+      <span class="content">{{marriage ===0? '已婚':'未婚'}}<span class="iconfont" style="margin-left: 0.2rem;" @click="showMarriageModel">&#xe614;</span></span>
     </div>
     <div class="experiences-box">
       <span class="title">从业经验</span>
-      <span class="content">{{experiences}}年<span class="iconfont" style="margin-left: 0.2rem;">&#xe614;</span></span>
+      <span class="content">{{experiences}}年<span class="iconfont" style="margin-left: 0.2rem;" @click="showExperiencesModel">&#xe614;</span></span>
     </div>
     <div class="foot">
       <van-button round block type="info" native-type="submit">保存</van-button>
     </div>
-    <Popup ref="model"></Popup>
+    <Popup ref="model" @getData="getData"></Popup>
   </div>
 </template>
 <script>
@@ -77,7 +77,9 @@ export default {
       phone: '',
       idCard: '',
       gender: '',
-      marriage:''
+      marriage:'',
+      positiveUrl:'',
+      backUrl:''
     }
   },
   created() {
@@ -101,15 +103,54 @@ export default {
       console.log(file);
       this.headPortraitUrl = file.content;
     },
+    // 处理子组件保存的数据
+    getData(data) {
+      console.log(data);
+      for (let key in data) {
+        this[key] = data[key];
+      }
+    },
     showidCardModel() {
       let obj = {
         idCard:this.idCard,
-        name:this.idCard,
+        name:this.name,
         gender: this.gender,
-        age: this.gender
+        age: this.age,
+        positiveUrl:this.positiveUrl,
+        backUrl:this.backUrl
       };
       this.$refs.model.show('showIdCard',obj)
-    }
+    },
+    showNativeModel() {
+      let obj = {
+        value:0
+      };
+      this.$refs.model.show('showNative',obj)
+    },
+    showEducationModel() {
+      let obj = {
+        value:0
+      };
+      this.$refs.model.show('showEducation',obj)
+    },
+    showNationModel() {
+      let obj = {
+        value:0
+      };
+      this.$refs.model.show('showNation',obj)
+    },
+    showMarriageModel() {
+      let obj = {
+        value:0
+      };
+      this.$refs.model.show('showMarriage',obj)
+    },
+    showExperiencesModel() {
+      let obj = {
+        value:0
+      };
+      this.$refs.model.show('showExperiences',obj)
+    },
   }
 }
 </script>
