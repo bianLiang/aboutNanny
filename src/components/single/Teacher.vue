@@ -46,10 +46,9 @@ export default {
   },
    methods: {
     onSubmit(values) {
-      console.log('submit', values);
+      sessionStorage.setItem("Teacher",JSON.stringify(values));
       this.$router.push({
         name: "EditResume",
-        query: { setData:values}
       });
     },
   },

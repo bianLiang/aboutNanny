@@ -48,7 +48,7 @@
       <span class="content">{{experiences}}年<span class="iconfont" style="margin-left: 0.2rem;" @click="showExperiencesModel">&#xe614;</span></span>
     </div>
     <div class="foot">
-      <van-button round block type="info" native-type="submit">保存</van-button>
+      <van-button round block type="info" @click="submit">保存</van-button>
     </div>
     <Popup ref="model" @getData="getData"></Popup>
   </div>
@@ -151,6 +151,29 @@ export default {
       };
       this.$refs.model.show('showExperiences',obj)
     },
+    submit () {
+      const values = {
+      headPortraitUrl: this.headPortraitUrl,
+      name: this.name,
+      education:this.education,
+      genitals:this.genitals,
+      nation:this.nation,
+      constellation:this.constellation,
+      age:this.age,
+      native: this.native,
+      experiences:this.experiences,
+      phone: this.phone,
+      idCard: this.idCard,
+      gender: this.gender,
+      marriage:this.marriage,
+      positiveUrl:this.positiveUrl,
+      backUrl:this.backUrl
+    }
+    sessionStorage.setItem("BasicInformation",JSON.stringify(values));
+      this.$router.push({
+        name: "EditResume",
+      });
+    }
   }
 }
 </script>

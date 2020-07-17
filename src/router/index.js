@@ -7,6 +7,8 @@ import Search from '../components/single/Search'
 import EditResume from '../components/single/EditResume'
 import Teacher from '../components/single/Teacher'
 import BasicInformation from '../components/single/BasicInformation'
+import Specialty from '../components/single/Specialty'
+import Jobintension from '../components/single/Jobintension'
 import PageOne from '../components/bangbaoh5/PageOne'
 import PageTwo from '../components/bangbaoh5/PageTwo'
 
@@ -51,6 +53,16 @@ export default new Router({
       path:'/BasicInformation',
       name:'BasicInformation',
       component:BasicInformation,
+    },
+    {
+      path:'/Specialty',
+      name:'Specialty',
+      component:Specialty,
+    },
+    {
+      path:'/Jobintension',
+      name:'Jobintension',
+      component:Jobintension,
     },
     {
       path: '/PageOne',

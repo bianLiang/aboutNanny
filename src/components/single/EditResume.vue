@@ -24,21 +24,40 @@
     <div class="specialty-max-box">
       <div class="teacher-box">
         <span class="teacher">特长优点</span>
-        <span class="push">{{specialtyList.length>0? specialtyTitle='去修改' : specialtyTitle='去添加'}}<span class="iconfont">&#xe614;</span></span>
+        <span class="push" @click="onSpecialty">{{specialtyList.length>0? specialtyTitle='去修改' : specialtyTitle='去添加'}}<span class="iconfont">&#xe614;</span></span>
       </div>
-      <div class="specialty-box" v-if="specialtyList.length>0">
-        <div class="specialty-item" v-for="(item,index) in specialtyList" :key="index">{{item}}</div>
+      <div v-if="specialtyList.length>0">
+        <div class="specialty-box">
+          <p style="font-size: 0.32rem;color: #666;margin-top: 0.3rem;">{{specialtyList[0].title}}</p>
+          <div class="specialty-item" v-for="(item,index) in specialtyList[0].list" :key="index">{{item}}</div>
+        </div>
+        <div class="specialty-box">
+          <p style="font-size: 0.32rem;color: #666;margin-top: 0.3rem;">{{specialtyList[1].title}}</p>
+          <div class="specialty-item" v-for="(item,index) in specialtyList[1].list" :key="index">{{item}}</div>
+        </div>
+        <div class="specialty-box">
+          <p style="font-size: 0.32rem;color: #666;margin-top: 0.3rem;">{{specialtyList[2].title}}</p>
+          <div class="specialty-item" v-for="(item,index) in specialtyList[2].list" :key="index">{{item}}</div>
+        </div>
+        <div class="specialty-box">
+          <p style="font-size: 0.32rem;color: #666;margin-top: 0.3rem;">{{specialtyList[3].title}}</p>
+          <div class="specialty-item" v-for="(item,index) in specialtyList[3].list" :key="index">{{item}}</div>
+        </div>
+        <div class="specialty-box">
+          <p style="font-size: 0.32rem;color: #666;margin-top: 0.3rem;">{{specialtyList[4].title}}</p>
+          <div class="specialty-item" v-for="(item,index) in specialtyList[4].list" :key="index">{{item}}</div>
+        </div>
       </div>
     </div>
     <div class="teacher-max-box">
       <div class="teacher-box">
         <span class="teacher">求职意向</span>
-        <span class="push">{{jobType? jobTypeTitle='去修改' : jobTypeTitle='去添加'}}<span class="iconfont">&#xe614;</span></span>
+        <span class="push" @click="onJobintension">{{jobType? jobTypeTitle='去修改' : jobTypeTitle='去添加'}}<span class="iconfont">&#xe614;</span></span>
       </div>
       <div v-if="jobType? true: false">
         <p class="paragraph">求职类型：{{jobType}}</p>
-        <p class="paragraph">是否住家：{{isHome}}</p>
-        <p class="paragraph">求职内容：{{jobSearchCategory}}</p>
+        <!-- <p class="paragraph">是否住家：{{isHome}}</p> -->
+        <p class="paragraph">求职内容：{{jobSearchCategory.toString()}}</p>
         <p class="paragraph">期望薪资：{{salaryExpectation}}</p>
         <p class="paragraph">现住地址：{{currentAddress}}</p>
       </div>
@@ -121,7 +140,9 @@ export default {
     [Popup.name]: Popup
   },
   created () {
-    this.setData(this.$route.query.setData);
+    this.setData(JSON.parse(sessionStorage.getItem('Teacher')));
+    this.setData(JSON.parse(sessionStorage.getItem('BasicInformation')));
+    this.setData(JSON.parse(sessionStorage.getItem('Specialty')));
   },
   data() {
     return {
@@ -143,14 +164,18 @@ export default {
       age:35,
       native:'安徽省',
       experiences: 5,
-      jobType:'保姆',
+      jobType:'保姆-不住家',
       isHome: '是',
-      jobSearchCategory: '做饭做家务',
+      jobSearchCategory: ['做家务'],
       salaryExpectation: '5000-6000',
+      rest: '双休',
       currentAddress: '朝阳欢乐谷',
+      jobState: '待岗',
       idCard:'342623199412018513',
       gender:'男',
       marriage: 0,
+      positiveUrl:'',
+      backUrl:'',
       experiencesList:[
         {type:'保姆',experiencetime:'2017.05 ～ 2019.08',experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
         {type:'月嫂',experiencetime:'2017.05 ～ 2019.08',experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
@@ -191,7 +216,13 @@ export default {
       showPersonalDisplayUrl: '',
       currentPages: 0,
       isShowPersonalDisplay: false,
-      specialtyList:[]
+      specialtyList:[
+        {title:'做饭', list:['广东菜']},
+        {title:'照顾小孩', list:['0至1岁','1至3岁','接送小孩']},
+        {title:'照顾老人', list:['自理老人']},
+        {title:'照顾宠物', list:['狗']},
+        {title:'其他', list:['营养搭配','衣物保养','开车','英语','照顾病人']}
+      ]
     }
   },
   methods: {
@@ -220,18 +251,16 @@ export default {
           phone: this.phone,
           idCard: this.idCard,
           gender: this.gender,
-          marriage:this.marriage
+          marriage:this.marriage,
+          positiveUrl:this.positiveUrl,
+          backUrl:this.backUrl
         }
       });
     },
     // 处理保存上来的数据
     setData (data) {
       for(let key in data) {
-        if (key === 'company') {
-          this.company = data[key];
-        } else if (key === 'phone') {
-          this.phone = data[key];
-        }
+        this[key] = data[key];
       }
     },
      // 截取10条图片
@@ -266,6 +295,27 @@ export default {
           this.currentPages - 1
         ];
       }
+    },
+     onSpecialty() {
+      this.$router.push({
+        name: "Specialty",
+        query: {
+          specialtyList: this.specialtyList
+        }
+      });
+    },
+     onJobintension() {
+      this.$router.push({
+        name: "Jobintension",
+        query: {
+          jobType: this.jobType,
+          jobSearchCategory: this.jobSearchCategory,
+          salaryExpectation: this.salaryExpectation,
+          rest: this.rest,
+          currentAddress:this.currentAddress,
+          jobState:this.jobState,
+        }
+      });
     },
   }
 }
@@ -477,18 +527,18 @@ export default {
   margin-top: 0.2rem;
 }
 .specialty-box {
-  display: flex;
-  flex-wrap:wrap;
+  line-height: 0.3rem;
 }
 .specialty-item {
   font-size: 0.2rem;
   color: #3395FF;
   width: 1.5rem;
-  margin: 0.1rem 0.1rem;
+  margin: 0 0.1rem;
   height: 0.5rem;
   line-height: 0.5rem;
   border: 0.02rem solid #3395FF;
   border-radius: 0.1rem;
   text-align: center;
+  display: inline-block;
 }
 </style>

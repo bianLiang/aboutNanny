@@ -38,6 +38,10 @@ export default {
         this.title ="家政老师"
     } else if (this.$route.path === "/BasicInformation") {
         this.title ='基本信息'
+    } else if (this.$route.path === "/Specialty") {
+        this.title ='优点特长'
+    } else if (this.$route.path === "/Jobintension") {
+        this.title ='求职意向'
     }
     if (this.$route.path === "/PageOne" || this.$route.path === "/PageTwo") {
       this.isTitle = false;

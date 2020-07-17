@@ -30,6 +30,10 @@ export default {
         this.$refs.myTitle.changeTitle("家政老师");
       } else if (this.$route.path === "/BasicInformation") {
         this.$refs.myTitle.changeTitle("基本信息");
+      } else if (this.$route.path === "/Specialty") {
+        this.$refs.myTitle.changeTitle("优点特长");
+      } else if (this.$route.path === "/Jobintension") {
+        this.$refs.myTitle.changeTitle("求职意向");
       }
     }
   },

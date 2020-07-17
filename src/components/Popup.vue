@@ -183,11 +183,38 @@
         @cancel="showExperiences = false"
       />
     </van-popup>
+    <!-- 有点特长,通用多选 -->
+    <van-popup v-model="showSpecialty" :style="{ height: '50%' }" position="bottom">
+      <div>
+        <p class="popup-title"><span @click="cancelSelect" style="font-size:0.3rem;margin-left: 0.5rem;">取消</span><span style="font-size:0.36rem;font-weight: 600;">{{title}}</span><span style="font-size:0.3rem;margin-right: 0.5rem;" @click="okSelect">确定</span></p>
+        <van-checkbox-group style="padding: 0 0.5rem;" v-model="checkResult" direction="horizontal">
+          <van-checkbox v-for="item in result" :key="item" shape="square" :name="item" style="font-size:0.3rem;width: 2.1rem;margin: 0.2rem 0;">{{item}}</van-checkbox>
+        </van-checkbox-group>
+      </div>
+    </van-popup>
+     <!-- 通用单选 -->
+    <van-popup v-model="showRadio" position="bottom">
+      <van-picker
+        show-toolbar
+        :title=titleRadio
+        :default-index= indexRadio
+        :columns="columnsRadio"
+        @confirm="onConfirmRadio"
+        @cancel="showRadio = false"
+      />
+    </van-popup>
+    <!-- 通用文本输入 -->
+    <van-popup style="background: #eee;" v-model="showText" :style="{ height: '50%' }" position="bottom">
+      <p class="popup-title"><span @click="cancelText" style="font-size:0.3rem;margin-left: 0.5rem;">取消</span><span style="font-size:0.36rem;font-weight: 600;">{{labelText}}</span><span style="font-size:0.3rem;margin-right: 0.5rem;" @click="okText">确定</span></p>
+      <van-cell-group>
+        <van-field v-model="valueText" :label="labelText" :placeholder="placeholderText" />
+      </van-cell-group>
+    </van-popup>
   </div>
 </template>
 <script>
 import areaList from '../api/area.js'
-import { Popup, Uploader,Button,Form,Field,Picker  } from "vant";
+import { Popup, Uploader,Button,Form,Field,Picker,Checkbox, CheckboxGroup} from "vant";
 export default {
   name: "Popup",
   components: {
@@ -197,9 +224,19 @@ export default {
     [Form.name]: Form,
     [Field.name]: Field,
     [Picker.name]: Picker,
+    [Checkbox.name]: Checkbox,
+    [CheckboxGroup.name]: CheckboxGroup,
   },
   data() {
     return {
+      showText:false,
+      valueText: '',
+      labelText:'文本',
+      placeholderText: '请输入',
+      titleRadio: '标题',
+      showRadio:false,
+      indexRadio:false,
+      columnsRadio:[],
       showIdCard: false,
       isPhotoError: false,
       photoErrorMsg:'',
@@ -349,7 +386,10 @@ export default {
         '珞巴族',
         '基诺族'
       ],
-
+      showSpecialty:false,
+      result:[],
+      checkResult:[],
+      title:'标题'
     };
   },
   methods: {
@@ -377,6 +417,20 @@ export default {
       } else if (type === 'showExperiences') {
         this.indexExperiences = options.value;
         this.showExperiences = true;
+      } else if (type === 'checkbox') {
+        this.result = options.result;
+        this.checkResult = options.checkResult;
+        this.title = options.title;
+        this.showSpecialty = true;
+      } else if (type === 'Radio') {
+        this.titleRadio = options.titleRadio;
+        this.columnsRadio = options.columnsRadio;
+        this.showRadio = true;
+      } else if (type === 'text') {
+        this.valueText=options.valueText;
+        this.labelText = options.labelText;
+        this.placeholderText = options.placeholderText;
+        this.showText = true;
       }
     },
     uploaderPositive(file) {
@@ -447,6 +501,26 @@ export default {
       this.$emit('getData',data)
       this.showExperiences = false;
     },
+    onConfirmRadio(value) {
+      console.log(value);
+      // const data = {experiences:parseInt(value)};
+      // this.$emit('getData',data)
+      this.showRadio = false;
+    },
+    cancelSelect() {
+      this.showSpecialty = false;
+    },
+    okSelect() {
+      const data = {checkResult:this.checkResult}
+      this.$emit('getData',data)
+      this.showSpecialty = false;
+    },
+    cancelText() {
+      this.showText = false;
+    },
+    okText() {
+      this.showText = false;
+    }
   }
 };
 </script>
@@ -497,5 +571,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.popup-title {
+  display: flex;
+  justify-content: space-between;
+  line-height: 0.2rem;
+  margin: 0.5rem 0;
+  padding-bottom: 0.3rem;
+  border-bottom: 0.01rem solid #ccc;
 }
 </style>
