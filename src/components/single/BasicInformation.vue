@@ -168,8 +168,8 @@ export default {
       marriage:this.marriage,
       positiveUrl:this.positiveUrl,
       backUrl:this.backUrl
-    }
-    sessionStorage.setItem("BasicInformation",JSON.stringify(values));
+      }
+      sessionStorage.setItem("BasicInformation",JSON.stringify(values));
       this.$router.push({
         name: "EditResume",
       });

@@ -237,6 +237,7 @@ export default {
       showRadio:false,
       indexRadio:false,
       columnsRadio:[],
+      type: '',
       showIdCard: false,
       isPhotoError: false,
       photoErrorMsg:'',
@@ -425,11 +426,13 @@ export default {
       } else if (type === 'Radio') {
         this.titleRadio = options.titleRadio;
         this.columnsRadio = options.columnsRadio;
+        this.type = options.type;
         this.showRadio = true;
       } else if (type === 'text') {
         this.valueText=options.valueText;
         this.labelText = options.labelText;
         this.placeholderText = options.placeholderText;
+        this.type = options.type;
         this.showText = true;
       }
     },
@@ -502,9 +505,8 @@ export default {
       this.showExperiences = false;
     },
     onConfirmRadio(value) {
-      console.log(value);
-      // const data = {experiences:parseInt(value)};
-      // this.$emit('getData',data)
+      const data = {key: this.type,value:value};
+      this.$emit('getData',data);
       this.showRadio = false;
     },
     cancelSelect() {
@@ -519,6 +521,8 @@ export default {
       this.showText = false;
     },
     okText() {
+      const data = {key: this.type,value:this.valueText};
+      this.$emit('getData',data);
       this.showText = false;
     }
   }

@@ -58,18 +58,18 @@
         <p class="paragraph">求职类型：{{jobType}}</p>
         <!-- <p class="paragraph">是否住家：{{isHome}}</p> -->
         <p class="paragraph">求职内容：{{jobSearchCategory.toString()}}</p>
-        <p class="paragraph">期望薪资：{{salaryExpectation}}</p>
+        <p class="paragraph">期望薪资：{{salaryExpectation.join("-")}}</p>
         <p class="paragraph">现住地址：{{currentAddress}}</p>
       </div>
     </div>
     <div class="teacher-max-box">
       <div class="teacher-box">
         <span class="teacher">工作经验</span>
-        <span class="push">{{experiencesList.lenght>0? experiencesTitle='去修改' : experiencesTitle='去添加'}}<span class="iconfont">&#xe614;</span></span>
+        <span class="push" @click="onExperience('去添加')">去添加<span class="iconfont">&#xe614;</span></span>
       </div>
       <div v-for="(item, index) in experiencesList" :key="index" class="experiences-box">
-        <p class="experiences-time">{{item.type}} {{item.experiencetime}}</p>
-        <p class="experiences-content"><span>{{item.experienceContent}}</span><span class="iconfont">&#xe614;</span></p>
+        <p class="experiences-time">{{item.type}} {{item.startTime.join(".") }}~{{item.endTime.join(".")}}</p>
+        <p class="experiences-content"><span>{{item.experienceContent}}</span><span class="iconfont" @click="onExperience('去修改', index)">&#xe614;</span></p>
       </div>
     </div>
     <div class="certificate-max-box">
@@ -143,6 +143,8 @@ export default {
     this.setData(JSON.parse(sessionStorage.getItem('Teacher')));
     this.setData(JSON.parse(sessionStorage.getItem('BasicInformation')));
     this.setData(JSON.parse(sessionStorage.getItem('Specialty')));
+    this.setData(JSON.parse(sessionStorage.getItem('Jobintension')));
+    this.setData(JSON.parse(sessionStorage.getItem('Experience')));
   },
   data() {
     return {
@@ -167,7 +169,7 @@ export default {
       jobType:'保姆-不住家',
       isHome: '是',
       jobSearchCategory: ['做家务'],
-      salaryExpectation: '5000-6000',
+      salaryExpectation: ["5k","6K"],
       rest: '双休',
       currentAddress: '朝阳欢乐谷',
       jobState: '待岗',
@@ -177,8 +179,8 @@ export default {
       positiveUrl:'',
       backUrl:'',
       experiencesList:[
-        {type:'保姆',experiencetime:'2017.05 ～ 2019.08',experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
-        {type:'月嫂',experiencetime:'2017.05 ～ 2019.08',experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
+        {type:'保姆',startTime:['2017','05'],endTime:['2019','08'],experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
+        {type:'月嫂',startTime:['2017','05'],endTime:['2019','08'],experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
       ],
       certificateList:[
         {text:'身份证', url:'aca'},
@@ -317,6 +319,27 @@ export default {
         }
       });
     },
+    onExperience(title, index) {
+      let data;
+      let type;
+      if (title === '去添加') {
+        // data = {type:'',startTime:[],endTime:[],experienceContent:''};
+        type = '添加工作经验';
+        this.$emit('changeTitle',type);
+      } else if (title === '去修改') {
+        // data = this.experiencesList[index];
+        type = '修改工作经验';
+        this.$emit('changeTitle',type);
+      }
+      this.$router.push({
+        name: "Experience",
+        query: {
+          experiencesList: this.experiencesList,
+          index:index,
+          type:type
+        }
+      });
+    }
   }
 }
 </script>

@@ -42,6 +42,8 @@ export default {
         this.title ='优点特长'
     } else if (this.$route.path === "/Jobintension") {
         this.title ='求职意向'
+    } else if (this.$route.path === "/Experience") {
+        this.title ='添加工作经验'
     }
     if (this.$route.path === "/PageOne" || this.$route.path === "/PageTwo") {
       this.isTitle = false;

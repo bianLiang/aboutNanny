@@ -2,9 +2,9 @@
   <div id="app">
     <Title ref="myTitle" />
     <keep-alive>
-      <router-view v-if="$route.meta.keepAlive"></router-view>
+      <router-view @changeTitle="changeTitle" v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    <router-view @changeTitle="changeTitle" v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
@@ -38,9 +38,9 @@ export default {
     }
   },
   methods: {
-    // onClickList() {
-    //   this.$refs.details.onClickList();
-    // }
+    changeTitle(data) {
+      this.$refs.myTitle.changeTitle(data);
+    }
   }
 };
 </script>

@@ -10,7 +10,7 @@
     </div>
     <div class="min-box">
       <span class="title">期待薪资</span>
-      <span class="content"><span class="content-p">{{salaryExpectation}}</span><span @click="onClickRadio('期待薪资')" class="iconfont" style="margin-left: 0.2rem;" >&#xe614;</span></span>
+      <span class="content"><span class="content-p">{{salaryExpectation.join("-")}}</span><span @click="onClickRadio('期待薪资')" class="iconfont" style="margin-left: 0.2rem;" >&#xe614;</span></span>
     </div>
     <div class="min-box">
       <span class="title">每周休息</span>
@@ -58,7 +58,16 @@ export default {
     };
   },
   methods: {
-    getData(data) {},
+    getData(data) {
+      console.log(data);
+       this[data.key] = data.value;
+       for (let key in data) {
+        if(key === 'checkResult') {
+         this.jobSearchCategory = data[key];
+       }
+      }
+
+    },
     onClickText(title) {
       let placeholderText;
       if (title === '现住地址') {
@@ -67,14 +76,17 @@ export default {
       const obj = {
         valueText:this.currentAddress,
         labelText: title,
-        placeholderText: placeholderText
+        placeholderText: placeholderText,
+        type: 'currentAddress'
       };
       this.$refs.model.show('text',obj)
     },
     onClickRadio(title) {
       let columnsRadio;
+      let type;
       if (title=== '工作类型') {
         columnsRadio = ['保姆-住家','保姆-不住家','育儿嫂-住家','育儿嫂-不住家','月嫂','钟点工'];
+        type = 'jobType';
       } else if (title=== '期待薪资') {
         columnsRadio = [
           {
@@ -83,15 +95,19 @@ export default {
           {
             values: ['1K', '2K', '3K', '4K', '5K', '6K', '7K', '8K', '9K']
           },
-        ]
+        ];
+        type = 'salaryExpectation';
       } else if (title === '每周休息') {
         columnsRadio = ['1天','2天', '不休','都可以'];
+        type = 'rest';
       } else if (title === '工作状态') {
         columnsRadio = ['待岗','在岗'];
+        type = 'jobState';
       }
       const obj = {
         titleRadio:title,
-        columnsRadio: columnsRadio
+        columnsRadio: columnsRadio,
+        type: type
       };
       this.$refs.model.show('Radio',obj)
     },
@@ -103,7 +119,20 @@ export default {
       };
       this.$refs.model.show('checkbox',obj)
     },
-    submit() {}
+    submit() {
+      const values = {
+        jobType: this.jobType,
+        salaryExpectation: this.salaryExpectation,
+        rest: this.rest,
+        jobState: this.jobState,
+        jobSearchCategory:this.jobSearchCategory,
+        currentAddress: this.currentAddress
+      };
+      sessionStorage.setItem("Jobintension",JSON.stringify(values));
+      this.$router.push({
+        name: "EditResume",
+      });
+    }
   }
 }
 </script>
