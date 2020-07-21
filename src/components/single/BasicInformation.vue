@@ -213,6 +213,8 @@ export default {
 .content {
   color: #666;
   font-size: 0.32rem;
+  display: flex;
+  align-items: center;
 }
 .foot {
   margin-top: 0.2rem;

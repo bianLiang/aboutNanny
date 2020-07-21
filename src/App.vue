@@ -34,6 +34,8 @@ export default {
         this.$refs.myTitle.changeTitle("优点特长");
       } else if (this.$route.path === "/Jobintension") {
         this.$refs.myTitle.changeTitle("求职意向");
+      } else if (this.$route.path === "/Certificate") {
+        this.$refs.myTitle.changeTitle("证件证书");
       }
     }
   },

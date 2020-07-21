@@ -65,7 +65,7 @@
     <div class="teacher-max-box">
       <div class="teacher-box">
         <span class="teacher">工作经验</span>
-        <span class="push" @click="onExperience('去添加')">去添加<span class="iconfont">&#xe614;</span></span>
+        <span class="push" @click="onExperience('去添加', 0)">去添加<span class="iconfont">&#xe614;</span></span>
       </div>
       <div v-for="(item, index) in experiencesList" :key="index" class="experiences-box">
         <p class="experiences-time">{{item.type}} {{item.startTime.join(".") }}~{{item.endTime.join(".")}}</p>
@@ -75,9 +75,13 @@
     <div class="certificate-max-box">
       <div class="teacher-box">
         <span class="teacher">证件证书</span>
-        <span class="push">去添加<span class="iconfont">&#xe614;</span></span>
+        <span class="push">去添加<span class="iconfont" @click="onCertificate">&#xe614;</span></span>
       </div>
       <div class="certificate-box">
+        <div v-for="(item,index) in requiredCertificateList" :key="index" class="certificate-icon">
+          <span class="iconfont" v-bind:class="{ icon: item.url? true: false,icon_1: item.url? false: true}">&#xe658;</span>
+          <span v-bind:class="{ icon_3: item.url? true: false,icon_2: item.url? false: true}">{{item.text}}</span>
+        </div>
         <div v-for="(item,index) in certificateList" :key="index" class="certificate-icon">
           <span class="iconfont" v-bind:class="{ icon: item.url? true: false,icon_1: item.url? false: true}">&#xe658;</span>
           <span v-bind:class="{ icon_3: item.url? true: false,icon_2: item.url? false: true}">{{item.text}}</span>
@@ -182,15 +186,21 @@ export default {
         {type:'保姆',startTime:['2017','05'],endTime:['2019','08'],experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
         {type:'月嫂',startTime:['2017','05'],endTime:['2019','08'],experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
       ],
+      requiredCertificateList:[
+        {text:'身份证', url:'../../assets/img/tupian.jpg'},
+        {text:'健康证', url:require('../../assets/img/tupian.jpg')},
+        {text:'体检报告', url:require('../../assets/img/tupian.jpg')}
+      ],
       certificateList:[
-        {text:'身份证', url:'aca'},
-        {text:'母婴护理师', url:''},
-        {text:'育儿师', url:''},
-        {text:'厨师证', url:''},
+        {text:'母婴护理师', url:null},
+        {text:'育婴师', url:''},
         {text:'乙肝五项', url:''},
+        {text:'厨师证', url:''},
         {text:'营养师证', url:''},
+        {text:'教师证', url:''},
+        {text:'驾驶证', url:''},
         {text:'护士证', url:''},
-        {text:'教师证', url:''}
+        {text:'其他证书', url:''}
       ],
       personalDisplayList:[
         require('../../assets/img/tupian.jpg'),
@@ -323,20 +333,30 @@ export default {
       let data;
       let type;
       if (title === '去添加') {
-        // data = {type:'',startTime:[],endTime:[],experienceContent:''};
+        data = {type:'',startTime:[],endTime:[],experienceContent:''};
         type = '添加工作经验';
         this.$emit('changeTitle',type);
       } else if (title === '去修改') {
-        // data = this.experiencesList[index];
+        data = this.experiencesList[index];
         type = '修改工作经验';
         this.$emit('changeTitle',type);
       }
       this.$router.push({
         name: "Experience",
         query: {
-          experiencesList: this.experiencesList,
+          experiences: data,
+          experiencesList:this.experiencesList,
           index:index,
           type:type
+        }
+      });
+    },
+    onCertificate() {
+      this.$router.push({
+        name: "Certificate",
+        query: {
+          requiredCertificateList: this.requiredCertificateList,
+          certificateList: this.certificateList
         }
       });
     }

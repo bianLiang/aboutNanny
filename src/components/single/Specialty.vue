@@ -89,6 +89,8 @@ export default {
 .content {
   color: #666;
   font-size: 0.32rem;
+  display: flex;
+  align-items: center;
 }
 .content-p {
   width: 4rem;

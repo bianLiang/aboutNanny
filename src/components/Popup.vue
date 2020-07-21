@@ -210,6 +210,16 @@
         <van-field v-model="valueText" :label="labelText" :placeholder="placeholderText" />
       </van-cell-group>
     </van-popup>
+    <!-- 通用上传 -->
+    <van-popup style="background: #eee;" v-model="showUploader" :style="{ height: '80%' }" position="bottom">
+      <div style="background: #fff;padding: 0.2rem;">
+        <p style="margin: 0.2rem 0;font-size:0.36rem;color:#000;font-weight: 600;">{{uploaderTitle}}</p>
+        <van-uploader v-model="fileList" multiple :max-count="uploadeCount" />
+      </div>
+      <div class="foot">
+        <van-button round block type="info" @click="confirmUpload">保存</van-button>
+      </div>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -229,6 +239,10 @@ export default {
   },
   data() {
     return {
+      uploadeCount:1,
+      fileList:[],
+      uploaderTitle:'',
+      showUploader:false,
       showText:false,
       valueText: '',
       labelText:'文本',
@@ -434,6 +448,12 @@ export default {
         this.placeholderText = options.placeholderText;
         this.type = options.type;
         this.showText = true;
+      } else if (type === 'Uploader') {
+        this.type = options.type;
+        this.fileList = options.fileList;
+        this.uploadeCount = options.uploadeCount;
+        this.uploaderTitle = options.uploaderTitle;
+        this.showUploader = true;
       }
     },
     uploaderPositive(file) {
@@ -524,6 +544,9 @@ export default {
       const data = {key: this.type,value:this.valueText};
       this.$emit('getData',data);
       this.showText = false;
+    },
+    confirmUpload() {
+      this.showUploader = false;
     }
   }
 };
@@ -583,5 +606,18 @@ export default {
   margin: 0.5rem 0;
   padding-bottom: 0.3rem;
   border-bottom: 0.01rem solid #ccc;
+}
+.foot {
+  margin-top: 0.2rem;
+  margin: 16px;
+  background: #fff;
+  position: fixed;
+  bottom: -0.3rem;
+  width: 100%;
+  height: 1.5rem;
+  left: -0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

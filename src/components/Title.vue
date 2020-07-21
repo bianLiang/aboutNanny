@@ -44,6 +44,8 @@ export default {
         this.title ='求职意向'
     } else if (this.$route.path === "/Experience") {
         this.title ='添加工作经验'
+    } else if (this.$route.path === "/Certificate") {
+        this.title ='证件证书'
     }
     if (this.$route.path === "/PageOne" || this.$route.path === "/PageTwo") {
       this.isTitle = false;

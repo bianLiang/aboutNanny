@@ -10,6 +10,7 @@ import BasicInformation from '../components/single/BasicInformation'
 import Specialty from '../components/single/Specialty'
 import Jobintension from '../components/single/Jobintension'
 import Experience from '../components/single/Experience'
+import Certificate from '../components/single/Certificate'
 import PageOne from '../components/bangbaoh5/PageOne'
 import PageTwo from '../components/bangbaoh5/PageTwo'
 
@@ -69,6 +70,11 @@ export default new Router({
       path:'/Experience',
       name:'Experience',
       component:Experience,
+    },
+    {
+      path:'/Certificate',
+      name:'Certificate',
+      component:Certificate,
     },
     {
       path: '/PageOne',
