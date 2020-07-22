@@ -240,6 +240,7 @@ export default {
   data() {
     return {
       uploadeCount:1,
+      uploaderIndex:null,
       fileList:[],
       uploaderTitle:'',
       showUploader:false,
@@ -451,8 +452,10 @@ export default {
       } else if (type === 'Uploader') {
         this.type = options.type;
         this.fileList = options.fileList;
+        console.log(this.fileList);
         this.uploadeCount = options.uploadeCount;
         this.uploaderTitle = options.uploaderTitle;
+        this.uploaderIndex = options.uploaderIndex;
         this.showUploader = true;
       }
     },
@@ -545,7 +548,20 @@ export default {
       this.$emit('getData',data);
       this.showText = false;
     },
+    getFile(data) {
+      let list = [];
+      for(let i = 0; i < data.length; i++) {
+        list.push(data[i].content);
+      }
+      return list;
+    },
     confirmUpload() {
+      console.log(this.fileList);
+      if (this.fileList.length>0) {
+        const data= {key: this.type,value:this.getFile(fileList),index:this.uploaderIndex};
+      }
+
+      this.$emit('getData',data);
       this.showUploader = false;
     }
   }

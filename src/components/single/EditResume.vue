@@ -187,12 +187,12 @@ export default {
         {type:'月嫂',startTime:['2017','05'],endTime:['2019','08'],experienceContent:'从事保姆工作，打扫90平以下两室一厅'},
       ],
       requiredCertificateList:[
-        {text:'身份证', url:'../../assets/img/tupian.jpg'},
+        // {text:'身份证', url:require('../../assets/img/tupian.jpg')},
         {text:'健康证', url:require('../../assets/img/tupian.jpg')},
         {text:'体检报告', url:require('../../assets/img/tupian.jpg')}
       ],
       certificateList:[
-        {text:'母婴护理师', url:null},
+        {text:'母婴护理师', url:''},
         {text:'育婴师', url:''},
         {text:'乙肝五项', url:''},
         {text:'厨师证', url:''},

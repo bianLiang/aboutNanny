@@ -36,25 +36,57 @@ export default {
     };
   },
   methods: {
-    getData(data) {},
+    getData(data) {
+      console.log(data);
+      this[data.key][data.index].url = data.value[0].content;
+      console.log(this[data.key]);
+    },
+     // bae64转文件对象
+    dataURLtoFileFun (dataurl, filename) {
+      // 将base64转换为文件，dataurl为base64字符串，filename为文件名（必须带后缀名，如.jpg,.png）
+      let arr = dataurl.split(",");
+      let mime = arr[0].match(/:(.*?);/)[1];
+      let bstr = atob(arr[1]);
+      let n = bstr.length;
+      let u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
     onClickUploader(required,index,title) {
       let type;
       let fileList;
       if (required === '必传') {
         type = 'requiredCertificateList';
-        fileList = [this.requiredCertificateList[index].url];
-        console.log(fileList);
+        if (this.requiredCertificateList[index].url) {
+          // if (this.requiredCertificateList[index].url.indexOf('base64')>0) {
+          //    this.requiredCertificateList[index].url = this.dataURLtoFileFun(this.requiredCertificateList[index].url, "file.jpg")
+          // }
+          fileList = [this.requiredCertificateList[index]];
+        } else {
+          fileList = [];
+        }
       }
       if (required === '不必传') {
         type = 'certificateList';
-        fileList = [this.certificateList[index].url];
+        if(this.certificateList[index].url) {
+          //  if (this.certificateList[index].url.indexOf('base64')>0) {
+          //    this.certificateList[index].url = this.dataURLtoFileFun(this.certificateList[index].url, "file.jpg")
+          // }
+          fileList = [this.certificateList[index]];
+        } else {
+          fileList = [];
+        }
+
       }
 
       const obj = {
         fileList:fileList,
         type: type,
         uploadeCount:1,
-        uploaderTitle:title
+        uploaderTitle:title,
+        uploaderIndex:index
       };
       this.$refs.model.show('Uploader',obj);
     },
